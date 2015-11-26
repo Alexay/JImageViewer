@@ -4,12 +4,14 @@ import JImageViewer.model.MyImage;
 import JImageViewer.model.PixelInfo;
 import JImageViewer.view.ImageViewerController;
 import JImageViewer.view.RootController;
+import JImageViewer.view.StatusBarController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+import org.controlsfx.control.StatusBar;
 
 import java.io.IOException;
 
@@ -40,6 +42,7 @@ public class MainApp extends Application {
         this.primaryStage.setTitle("JImageViewer");
 
         initRootLayout();
+        showStatusBar();
     }
 
     /**
@@ -95,6 +98,31 @@ public class MainApp extends Application {
     public void hideImageViewer() {
         rootLayout.setCenter(null);
     }
+
+    /**
+     * Shows the StatusBar inside the root layout.
+     */
+    public void showStatusBar() {
+        try {
+            // Load StatusBar
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(MainApp.class.getResource("view/StatusBarView.fxml"));
+            StatusBar statusBar = loader.load();
+
+            // Set the StatusBar into the bottom of root layout.
+            rootLayout.setBottom(statusBar);
+
+            // Giving the controller access to the main app.
+            StatusBarController controller = loader.getController();
+            controller.setMainApp(this);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.err.println("StatusBar layout loading error.");
+        }
+    }
+
+    public void hideStatusBar() { rootLayout.setBottom(null); }
 
     /**
      * Returns the main stage.
