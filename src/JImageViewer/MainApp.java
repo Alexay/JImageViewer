@@ -1,6 +1,7 @@
 package JImageViewer;
 
 import JImageViewer.model.MyImage;
+import JImageViewer.model.PixelInfo;
 import JImageViewer.view.ImageViewerController;
 import JImageViewer.view.RootController;
 import javafx.application.Application;
@@ -10,15 +11,23 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
-import java.io.File;
 import java.io.IOException;
 
 public class MainApp extends Application {
     //final File img = new File("C:\\users\\user\\pictures\\1.png");
     private Stage primaryStage;
     private BorderPane rootLayout;
+
+    // The current image to be set in the ImageView
     private final MyImage currentImage = new MyImage();
 
+    // The information about the pixel that is being hovered over by the mouse
+    // in the ImageView
+    private final PixelInfo pixelInfo = new PixelInfo();
+
+    public PixelInfo getPixelInfo() {
+        return this.pixelInfo;
+    }
 
     public MyImage getCurrentImage() {
         return this.currentImage;

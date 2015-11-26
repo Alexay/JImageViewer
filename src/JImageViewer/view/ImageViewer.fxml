@@ -8,7 +8,7 @@
    <children>
       <HBox alignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <ImageView fx:id="imageView" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fx:id="imageView" onMouseEntered="#mouseHoverInfo" onMouseMoved="#mouseHoverInfo" pickOnBounds="true" preserveRatio="true" />
          </children>
       </HBox>
    </children>
