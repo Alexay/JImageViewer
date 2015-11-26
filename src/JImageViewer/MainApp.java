@@ -6,20 +6,18 @@ import JImageViewer.view.RootController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
 
 public class MainApp extends Application {
-    final File img = new File("C:\\users\\user\\pictures\\1.png");
+    //final File img = new File("C:\\users\\user\\pictures\\1.png");
     private Stage primaryStage;
     private BorderPane rootLayout;
-    private final MyImage currentImage = new MyImage(img);
+    private final MyImage currentImage = new MyImage();
 
 
     public MyImage getCurrentImage() {
@@ -28,25 +26,11 @@ public class MainApp extends Application {
 
     public MainApp() {}
 
-    public void menuOpenImageFile() {
-        FileChooser fileChooser = new FileChooser();
-
-        //Set extension filter
-        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Image types (*.jpg;  *.gif; *.bmp; *.png)", "*.jpg", "*.png", "*.bmp", "*.gif");
-        fileChooser.getExtensionFilters().add(extFilter);
-
-        //Show save file dialog
-        File imageFile = fileChooser.showOpenDialog(primaryStage);
-        currentImage.setImageFile(imageFile);
-        currentImage.setImage(new Image(imageFile.toURI().toString()));
-    }
-
     public void start(Stage primaryStage) throws Exception{
         this.primaryStage = primaryStage;
         this.primaryStage.setTitle("JImageViewer");
 
         initRootLayout();
-        showImageViewer();
     }
 
     /**
@@ -97,6 +81,10 @@ public class MainApp extends Application {
             e.printStackTrace();
             System.err.println("ImageViewer layout loading error.");
         }
+    }
+
+    public void hideImageViewer() {
+        rootLayout.setCenter(null);
     }
 
     /**

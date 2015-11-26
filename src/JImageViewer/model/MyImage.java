@@ -12,7 +12,10 @@ public class MyImage {
     private final ObjectProperty<Image> image;
 
     public MyImage(){
-        this(null);
+        this.imageFile = new SimpleObjectProperty<>();
+        this.image = new SimpleObjectProperty<>();
+
+        //this(null);
     }
 
     public MyImage(File imageFile) {
@@ -29,8 +32,8 @@ public class MyImage {
         return imageFile;
     }
 
-    public void setImageFile(File myImageFile) {
-        this.imageFile.set(myImageFile);
+    public void setImageFile(File imageFile) {
+        this.imageFile.set(imageFile);
     }
 
     public Image getImage() {
@@ -41,7 +44,7 @@ public class MyImage {
         return image;
     }
 
-    public void setImage(Image myImage) {
-        this.image.set(myImage);
+    public void setImage(Image image) {
+        this.image.set(image);
     }
 }

@@ -1,6 +1,7 @@
 package JImageViewer.view;
 
 import JImageViewer.MainApp;
+import JImageViewer.util.ImageViewPane;
 import javafx.fxml.FXML;
 import javafx.scene.image.ImageView;
 
@@ -9,6 +10,7 @@ public class ImageViewerController {
 
     @FXML
     private ImageView imageView;
+
 
 
     // Reference to the main application.
