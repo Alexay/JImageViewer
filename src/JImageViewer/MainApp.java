@@ -2,24 +2,29 @@ package JImageViewer;
 
 import JImageViewer.model.MyImage;
 import JImageViewer.model.PixelInfo;
+import JImageViewer.util.SimpleFileTreeItem;
 import JImageViewer.view.ImageViewerController;
 import JImageViewer.view.RootController;
 import JImageViewer.view.StatusBarController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.TreeCell;
+import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import org.controlsfx.control.StatusBar;
 
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class MainApp extends Application {
-    //final File img = new File("C:\\users\\user\\pictures\\1.png");
+
     private Stage primaryStage;
     private BorderPane rootLayout;
-
     // The current image to be set in the ImageView
     private final MyImage currentImage = new MyImage();
 
@@ -43,6 +48,7 @@ public class MainApp extends Application {
 
         initRootLayout();
         showStatusBar();
+        showFileExplorerTree();
     }
 
     /**
@@ -123,6 +129,28 @@ public class MainApp extends Application {
     }
 
     public void hideStatusBar() { rootLayout.setBottom(null); }
+
+
+    public void showFileExplorerTree() {
+
+        TreeItem<Path> root = new SimpleFileTreeItem(
+                Paths.get(System.getProperty("user.dir")));
+        root.setExpanded(true);
+        TreeView<Path> treeView1 = new TreeView<Path>(root);
+        treeView1.setCellFactory(treeView -> new TreeCell<Path>() {
+            @Override
+            public void updateItem(Path path, boolean empty) {
+                super.updateItem(path, empty);
+                if (empty) {
+                    setText(null);
+                } else {
+                    setText(path.getFileName().toString());
+                }
+            }
+        });
+
+        rootLayout.setLeft(treeView1);
+    }
 
     /**
      * Returns the main stage.
