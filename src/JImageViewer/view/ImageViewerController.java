@@ -50,8 +50,8 @@ public class ImageViewerController {
 
             // Unify and format the information
             String pixelInfo = "X: " + xPos + " Y: " + yPos + " | "
-                    + "r: " + colorRed + " g: " + colorGreen +
-                    " b: " + colorBlue + " | " + hexColor;
+                    + "R: " + colorRed + " G: " + colorGreen +
+                    " B: " + colorBlue + " | " + hexColor;
 
             // Pass it on to the MainApp
             this.mainApp.getPixelInfo().setInfoString(pixelInfo);
@@ -73,8 +73,8 @@ public class ImageViewerController {
 
             // Unify and format the information
             String pixelInfo = "X: " + xPos + " Y: " + yPos + " | "
-                    + "r: " + colorRed + " g: " + colorGreen +
-                    " b: " + colorBlue + " | " + hexColor;
+                    + "R: " + colorRed + " G: " + colorGreen +
+                    " B: " + colorBlue + " | " + hexColor;
 
             // Pass it on to the MainApp
             this.mainApp.getPixelInfo().setInfoString(pixelInfo);

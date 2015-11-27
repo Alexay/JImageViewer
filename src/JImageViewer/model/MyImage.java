@@ -12,8 +12,8 @@ public class MyImage {
     private final ObjectProperty<Image> image;
 
     public MyImage(){
-        this.imageFile = new SimpleObjectProperty<>();
-        this.image = new SimpleObjectProperty<>();
+        imageFile = new SimpleObjectProperty<>();
+        image = new SimpleObjectProperty<>();
 
         //this(null);
     }
@@ -21,7 +21,7 @@ public class MyImage {
     public MyImage(File imageFile) {
         this.imageFile = new SimpleObjectProperty<>(imageFile);
         Image imgToSet = new Image("file:"+imageFile.getAbsolutePath());
-        this.image = new SimpleObjectProperty<>(imgToSet);
+        image = new SimpleObjectProperty<>(imgToSet);
     }
 
     public File getImageFile() {

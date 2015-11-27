@@ -52,7 +52,7 @@ public class RootController {
         mainApp.showImageViewer();
 
         // Set the title of the window to the name of the image + the resolution
-        mainApp.getPrimaryStage().setTitle(imageFile.getName() + "  " +
+        mainApp.getPrimaryStage().setTitle(imageFile.getName() + " - " +
                 (int)mainApp.getCurrentImage().getImage().getWidth() + " x " +
                 (int)mainApp.getCurrentImage().getImage().getHeight());
     }
