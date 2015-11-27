@@ -4,30 +4,33 @@ package JImageViewer.model;
 import javafx.beans.property.*;
 import javafx.collections.ObservableList;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.PathMatcher;
-import java.nio.file.Paths;
 import java.util.stream.Stream;
 
 public class ImageData {
     private final ListProperty<Image> imageList;
     private final ObjectProperty<File> imageFile;
     private final ObjectProperty<Image> image;
+    private final ObjectProperty<ImageView> imageView;
+    private final BooleanProperty recursiveScanning;
     private final BooleanProperty sortByDateCreated;
     private final BooleanProperty sortByDateModified;
     private final BooleanProperty sortByFilename;
     private final BooleanProperty sortByAscending;
     private final BooleanProperty sortByDescending;
 
-
     public ImageData(){
         imageList = new SimpleListProperty<>();
         imageFile = new SimpleObjectProperty<>();
         image = new SimpleObjectProperty<>();
+        imageView = new SimpleObjectProperty<>();
+        recursiveScanning = new SimpleBooleanProperty(false);
         sortByFilename = new SimpleBooleanProperty(true);
         sortByDateCreated = new SimpleBooleanProperty(false);
         sortByDateModified = new SimpleBooleanProperty(false);
@@ -37,13 +40,13 @@ public class ImageData {
 
 
     /**
-     * Must be called any time the "Open" or Open Directory" application functions are used. This method
-     * parses the settings for sorting and recursivity and generates a list of images for the image viewer's
+     * Must be called any time the "Open" or Open Directory" application functions are used or if sorting setting
+     * are changed. This method parses the sorting setting and generates a list of images for the image viewer's
      * displaying.
      */
     public void refresh() {
-        final Path p = Paths.get("/", "home", "text", "xyz.txt");
-        final PathMatcher filter = p.getFileSystem().getPathMatcher("glob:*.txt");
+        final Path p = imageFile.get().toPath().getParent();
+        final PathMatcher filter = p.getFileSystem().getPathMatcher("glob:*.{jpg,gif,bmp,png}");
         try (final Stream<Path> stream = Files.list(p)) {
             stream.filter(filter::matches)
                     .forEach(System.out::println);
@@ -69,6 +72,18 @@ public class ImageData {
 
     public void setImageFile(File imageFile) {
         this.imageFile.set(imageFile);
+    }
+
+    public boolean getRecursiveScanning() {
+        return recursiveScanning.get();
+    }
+
+    public BooleanProperty recursiveScanningProperty() {
+        return recursiveScanning;
+    }
+
+    public void setRecursiveScanning(boolean recursiveScanning) {
+        this.recursiveScanning.set(recursiveScanning);
     }
 
     public boolean getSortByDateCreated() {
@@ -153,5 +168,17 @@ public class ImageData {
 
     public void setImageList(ObservableList<Image> imageList) {
         this.imageList.set(imageList);
+    }
+
+    public ImageView getImageView() {
+        return imageView.get();
+    }
+
+    public ObjectProperty<ImageView> imageViewProperty() {
+        return imageView;
+    }
+
+    public void setImageView(ImageView imageView) {
+        this.imageView.set(imageView);
     }
 }

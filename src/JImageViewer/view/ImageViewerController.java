@@ -1,6 +1,7 @@
 package JImageViewer.view;
 
 import JImageViewer.MainApp;
+import JImageViewer.util.ImageViewPane;
 import javafx.fxml.FXML;
 import javafx.scene.image.ImageView;
 
@@ -11,7 +12,6 @@ public class ImageViewerController {
 
     @FXML
     private ImageView imageView;
-
 
     // Reference to the main application.
     private MainApp mainApp;
@@ -27,8 +27,7 @@ public class ImageViewerController {
      * Initializes the controller class. This method is automatically called
      * after the fxml file has been loaded.
      */
-    @FXML
-    private void initialize() throws Exception{
+    private void initialize() throws Exception {
 
         // Robot to trace pixel information
         Robot robot = new Robot();
@@ -37,7 +36,7 @@ public class ImageViewerController {
          * This method is used to get the information about a pixel inside the ImageViewer over which the mouse
          * is currently hovering. Which then gets sent to the MainApp to be passed on to the StatusBar
          */
-        this.imageView.setOnMouseEntered(event -> {
+        mainApp.getImageData().getImageView().setOnMouseEntered(event -> {
             Color color = robot.getPixelColor((int) event.getScreenX(), (int) event.getScreenY());
 
             // Initializing pixel info
@@ -57,24 +56,24 @@ public class ImageViewerController {
             this.mainApp.getPixelInfo().setInfoString(pixelInfo);
 
         });
-        this.imageView.setOnMouseMoved(event -> {
-                Color color = robot.getPixelColor((int) event.getScreenX(), (int) event.getScreenY());
+        mainApp.getImageData().getImageView().setOnMouseMoved(event -> {
+            Color color = robot.getPixelColor((int) event.getScreenX(), (int) event.getScreenY());
 
-                // Initializing pixel info
-                String xPos = Integer.toString((int) event.getX());
-                String yPos = Integer.toString((int) event.getY());
-                String colorRed = Integer.toString(color.getRed());
-                String colorBlue = Integer.toString(color.getBlue());
-                String colorGreen = Integer.toString(color.getGreen());
-                String hexColor = String.format("#%02X%02X%02X", color.getRed(), color.getGreen(), color.getBlue());
+            // Initializing pixel info
+            String xPos = Integer.toString((int) event.getX());
+            String yPos = Integer.toString((int) event.getY());
+            String colorRed = Integer.toString(color.getRed());
+            String colorBlue = Integer.toString(color.getBlue());
+            String colorGreen = Integer.toString(color.getGreen());
+            String hexColor = String.format("#%02X%02X%02X", color.getRed(), color.getGreen(), color.getBlue());
 
-                // Unify and format the information
-                String pixelInfo = "X: " + xPos + " Y: " + yPos + " | "
-                        + "R: " + colorRed + " G: " + colorGreen +
-                        " B: " + colorBlue + " | " + hexColor;
+            // Unify and format the information
+            String pixelInfo = "X: " + xPos + " Y: " + yPos + " | "
+                    + "R: " + colorRed + " G: " + colorGreen +
+                    " B: " + colorBlue + " | " + hexColor;
 
-                // Pass it on to the MainApp
-                this.mainApp.getPixelInfo().setInfoString(pixelInfo);
+            // Pass it on to the MainApp
+            this.mainApp.getPixelInfo().setInfoString(pixelInfo);
         });
 
     }
@@ -85,10 +84,10 @@ public class ImageViewerController {
     public void setMainApp(MainApp mainApp) {
         this.mainApp = mainApp;
 
-        imageView.setImage(mainApp.getImageData().getImage());
+        imageView.setImage(this.mainApp.getImageData().getImage());
 
         // Listener for the current image that sets the current image as the image to be in the ImageView
-        mainApp.getImageData().imageProperty().addListener(((observable, oldValue, newValue) ->
+        this.mainApp.getImageData().imageProperty().addListener(((observable, oldValue, newValue) ->
                 imageView.setImage(newValue)));
 
     }

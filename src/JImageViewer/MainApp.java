@@ -2,6 +2,7 @@ package JImageViewer;
 
 import JImageViewer.model.ImageData;
 import JImageViewer.model.PixelInfo;
+import JImageViewer.util.ImageViewPane;
 import JImageViewer.util.SimpleFileTreeItem;
 import JImageViewer.view.ImageViewerController;
 import JImageViewer.view.RootController;
@@ -82,24 +83,32 @@ public class MainApp extends Application {
     /**
      * Shows the ImageViewer inside the root layout.
      */
-    public void showImageViewer() {
-        try {
-            // Load ImageViewer.
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(MainApp.class.getResource("view/ImageViewer.fxml"));
-            AnchorPane imageViewer = loader.load();
+    public void showImageViewer() throws Exception{
 
-            // Set the ImageViewer into the center of root layout.
-            rootLayout.setCenter(imageViewer);
-
-            // Giving the controller access to the main app.
-            ImageViewerController controller = loader.getController();
-            controller.setMainApp(this);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.err.println("ImageViewer layout loading error.");
-        }
+        ImageViewPane imageViewPane = new ImageViewPane(imageData.getImageView());
+        rootLayout.setCenter(imageViewPane);
+        imageViewPane.getImageView().setImage(imageData.getImage());
+        // Listener for the current image that sets the current image as the image to be in the ImageView
+        getImageData().imageProperty().addListener(((observable, oldValue, newValue) ->
+                imageViewPane.getImageView().setImage(newValue)));
+        imageViewPane.initializeListeners(this);
+//        try {
+//            // Load ImageViewer.
+//            FXMLLoader loader = new FXMLLoader();
+//            loader.setLocation(MainApp.class.getResource("view/ImageViewer.fxml"));
+//            AnchorPane imageViewer = loader.load();
+//
+//            // Set the ImageViewer into the center of root layout.
+//            rootLayout.setCenter(imageViewer);
+//
+//            // Giving the controller access to the main app.
+//            ImageViewerController controller = loader.getController();
+//            controller.setMainApp(this);
+//
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//            System.err.println("ImageViewer layout loading error.");
+//        }
     }
 
     public void hideImageViewer() {
@@ -153,6 +162,10 @@ public class MainApp extends Application {
         SplitPane fileExplorerPane = new SplitPane(treeView1);
 
         rootLayout.setLeft(fileExplorerPane);
+    }
+
+    public void hideFileExplorerTree(){
+        rootLayout.setLeft(null);
     }
 
     /**

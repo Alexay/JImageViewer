@@ -31,7 +31,7 @@ public class RootController {
     private MenuItem print;
 
     @FXML
-    private MenuItem scanFolderRecursively;
+    private RadioMenuItem scanFolderRecursively;
 
     @FXML
     private MenuItem sortByFilename;
@@ -91,10 +91,10 @@ public class RootController {
     private RadioMenuItem statusbar;
 
     @FXML
-    private MenuItem fileExplorer;
+    private RadioMenuItem fileExplorer;
 
     @FXML
-    private MenuItem metadataInfo;
+    private RadioMenuItem metadataInfo;
 
     @FXML
     private MenuItem about;
@@ -148,7 +148,7 @@ public class RootController {
     }
 
     @FXML
-    private void openImageFile () {
+    private void openImageFile () throws Exception {
         FileChooser fileChooser = new FileChooser();
 
         // Set extension filter
@@ -158,18 +158,133 @@ public class RootController {
         // Show save file dialog
         File imageFile = fileChooser.showOpenDialog(mainApp.getPrimaryStage());
 
-        // Set the app's current image.
+        // Set the app's current imageData.
         mainApp.getImageData().setImageFile(imageFile);
         mainApp.getImageData().setImage(new Image(imageFile.toURI().toString()));
-
-        // Show the ImageViewer
-        mainApp.showImageViewer();
+        mainApp.getImageData().setImageView(new ImageView(new Image(imageFile.toURI().toString())));
 
         // Set the title of the window to the name of the image + the resolution
         mainApp.getPrimaryStage().setTitle(imageFile.getName() + " - " +
                 (int)mainApp.getImageData().getImage().getWidth() + " x " +
                 (int)mainApp.getImageData().getImage().getHeight());
+
+        // Show the ImageViewer
+        mainApp.showImageViewer();
     }
+
+    @FXML
+    private void openImageDir () {}
+
+    @FXML
+    private void saveImageAs(){}
+
+    @FXML
+    private void fileRename(){}
+
+    @FXML
+    private void setSortByFilename(){
+        mainApp.getImageData().setSortByFilename(true);
+        mainApp.getImageData().setSortByDateCreated(false);
+        mainApp.getImageData().setSortByDateModified(false);
+        mainApp.getImageData().refresh();
+    }
+
+    @FXML
+    private void setSortByDateCreated(){
+        mainApp.getImageData().setSortByFilename(false);
+        mainApp.getImageData().setSortByDateCreated(true);
+        mainApp.getImageData().setSortByDateModified(false);
+        mainApp.getImageData().refresh();
+    }
+
+    @FXML
+    private void setSortByDateModified(){
+        mainApp.getImageData().setSortByFilename(false);
+        mainApp.getImageData().setSortByDateCreated(false);
+        mainApp.getImageData().setSortByDateModified(true);
+        mainApp.getImageData().refresh();
+    }
+
+    @FXML
+    private void setSortByAscending(){
+        mainApp.getImageData().setSortByAscending(true);
+        mainApp.getImageData().setSortByDescending(false);
+        mainApp.getImageData().refresh();
+    }
+
+    @FXML
+    private void setSortByDescending(){
+        mainApp.getImageData().setSortByAscending(false);
+        mainApp.getImageData().setSortByDescending(true);
+        mainApp.getImageData().refresh();
+    }
+
+    @FXML
+    private void setRecursiveScanning(){
+        mainApp.getImageData().setRecursiveScanning(scanFolderRecursively.isSelected());
+    }
+
+    @FXML
+    private void reloadImageFile(){}
+
+    @FXML
+    private void previousImage(){}
+
+    @FXML
+    private void nextImage(){}
+
+    @FXML
+    private void exitProgram(){
+        System.exit(0);
+    }
+
+    @FXML
+    private void imageRotateCounterClockwise(){}
+
+    @FXML
+    private void imageRotateClockwise(){}
+
+    @FXML
+    private void copyImage(){}
+
+    @FXML
+    private void pasteImage(){}
+
+    @FXML
+    private void engageFullscreen(){}
+
+    @FXML
+    private void imageZoomIn(){}
+
+    @FXML
+    private void imageZoomOut(){}
+
+    @FXML
+    private void toggleToolbar(){}
+
+    @FXML
+    private void toggleStatusbar(){
+        if (statusbar.isSelected())
+            mainApp.showStatusBar();
+        else
+            mainApp.hideStatusBar();
+    }
+
+    @FXML
+    private void toggleFileExplorer(){
+        if (fileExplorer.isSelected())
+            mainApp.showFileExplorerTree();
+        else
+            mainApp.hideFileExplorerTree();
+    }
+
+    @FXML
+    private void toggleMetadataInfo(){}
+
+    @FXML
+    private void displayAboutWindow(){}
+
+
 
     /**
      * This is an actually working method that actually prints the current image. I was amazed at how easy it was
