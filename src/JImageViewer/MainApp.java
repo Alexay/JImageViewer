@@ -1,6 +1,6 @@
 package JImageViewer;
 
-import JImageViewer.model.MyImage;
+import JImageViewer.model.ImageData;
 import JImageViewer.model.PixelInfo;
 import JImageViewer.util.SimpleFileTreeItem;
 import JImageViewer.view.ImageViewerController;
@@ -9,6 +9,7 @@ import JImageViewer.view.StatusBarController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.SplitPane;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
@@ -26,7 +27,7 @@ public class MainApp extends Application {
     private Stage primaryStage;
     private BorderPane rootLayout;
     // The current image to be set in the ImageView
-    private final MyImage currentImage = new MyImage();
+    private final ImageData imageData = new ImageData();
 
     // The information about the pixel that is being hovered over by the mouse
     // in the ImageView
@@ -36,8 +37,8 @@ public class MainApp extends Application {
         return this.pixelInfo;
     }
 
-    public MyImage getCurrentImage() {
-        return this.currentImage;
+    public ImageData getImageData() {
+        return this.imageData;
     }
 
     public MainApp() {}
@@ -149,7 +150,9 @@ public class MainApp extends Application {
             }
         });
 
-        rootLayout.setLeft(treeView1);
+        SplitPane fileExplorerPane = new SplitPane(treeView1);
+
+        rootLayout.setLeft(fileExplorerPane);
     }
 
     /**

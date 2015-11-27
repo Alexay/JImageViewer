@@ -159,16 +159,16 @@ public class RootController {
         File imageFile = fileChooser.showOpenDialog(mainApp.getPrimaryStage());
 
         // Set the app's current image.
-        mainApp.getCurrentImage().setImageFile(imageFile);
-        mainApp.getCurrentImage().setImage(new Image(imageFile.toURI().toString()));
+        mainApp.getImageData().setImageFile(imageFile);
+        mainApp.getImageData().setImage(new Image(imageFile.toURI().toString()));
 
         // Show the ImageViewer
         mainApp.showImageViewer();
 
         // Set the title of the window to the name of the image + the resolution
         mainApp.getPrimaryStage().setTitle(imageFile.getName() + " - " +
-                (int)mainApp.getCurrentImage().getImage().getWidth() + " x " +
-                (int)mainApp.getCurrentImage().getImage().getHeight());
+                (int)mainApp.getImageData().getImage().getWidth() + " x " +
+                (int)mainApp.getImageData().getImage().getHeight());
     }
 
     /**
@@ -177,7 +177,7 @@ public class RootController {
      */
     @FXML
     private void printImage() {
-        if (mainApp.getCurrentImage().getImage() == null)
+        if (mainApp.getImageData().getImage() == null)
             System.out.println("No image loaded, aborting printing...");
 
         else {
@@ -190,7 +190,7 @@ public class RootController {
                         protected Void call() throws Exception {
                             PrinterJob printerJob = PrinterJob.createPrinterJob();
                             if (printerJob != null) {
-                                boolean success = printerJob.printPage(new ImageView(mainApp.getCurrentImage().getImage()));
+                                boolean success = printerJob.printPage(new ImageView(mainApp.getImageData().getImage()));
                                 if (success) {
                                     printerJob.endJob();
                                 }

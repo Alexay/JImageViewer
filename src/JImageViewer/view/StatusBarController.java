@@ -58,7 +58,7 @@ public class StatusBarController {
         });
 
         // Initializing date and file size info listener and updater
-        this.mainApp.getCurrentImage().imageFileProperty().addListener(((observable, oldValue, newValue) -> {
+        this.mainApp.getImageData().imageFileProperty().addListener(((observable, oldValue, newValue) -> {
             fileSize.setText(FileSizeReader.readableFileSize(newValue.length()));
             creationDate.setText(" " + simpleDateFormat.format(new Date(newValue.lastModified())));
         }));
