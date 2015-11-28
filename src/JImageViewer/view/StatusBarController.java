@@ -46,8 +46,8 @@ public class StatusBarController {
 
         // Initializing labels and date formatter for the date label
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat();
-        Label fileSize = new Label();
-        Label creationDate = new Label();
+        Label fileSize = new Label(FileSizeReader.readableFileSize(mainApp.getImageData().getImageFile().length()));
+        Label creationDate = new Label(" " + simpleDateFormat.format(new Date(mainApp.getImageData().getImageFile().lastModified())));
 
         // Adding the labels to the right of the StatusBar
         statusBar.getRightItems().addAll(fileSize, new Separator(Orientation.VERTICAL), creationDate);
@@ -62,6 +62,5 @@ public class StatusBarController {
             fileSize.setText(FileSizeReader.readableFileSize(newValue.length()));
             creationDate.setText(" " + simpleDateFormat.format(new Date(newValue.lastModified())));
         }));
-
     }
 }

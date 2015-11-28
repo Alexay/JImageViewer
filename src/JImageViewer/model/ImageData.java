@@ -1,20 +1,19 @@
 package JImageViewer.model;
 
 
-import javafx.beans.property.*;
-import javafx.collections.ObservableList;
+import JImageViewer.util.ImageFileReader;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.PathMatcher;
-import java.util.stream.Stream;
 
 public class ImageData {
-    private final ListProperty<Image> imageList;
+    private Image[] imageList;
+    private int currentListIndex;
     private final ObjectProperty<File> imageFile;
     private final ObjectProperty<Image> image;
     private final ObjectProperty<ImageView> imageView;
@@ -26,7 +25,6 @@ public class ImageData {
     private final BooleanProperty sortByDescending;
 
     public ImageData(){
-        imageList = new SimpleListProperty<>();
         imageFile = new SimpleObjectProperty<>();
         image = new SimpleObjectProperty<>();
         imageView = new SimpleObjectProperty<>();
@@ -45,19 +43,41 @@ public class ImageData {
      * displaying.
      */
     public void refresh() {
-        // Putting all the user settings into an array to pass on to the ImageFileReader
+        // Putting all the user settings into an array to pass on to the ImageFileReader.
         final boolean[] userSettings = {recursiveScanning.get(), sortByFilename.get(), sortByDateCreated.get(),sortByDateModified.get(), sortByAscending.get(), sortByDescending.get()};
 
+        // Setting the current imageList to be parsed based on the current path and current settings.
+        imageList = ImageFileReader.read(imageFile.get().toPath(), userSettings);
+
+        // Set the current list index
+        for (int i = 0 ; i < imageList.length ; i++) {
+            if (image.get()==null)
+                image.set(imageList[0]);
+            else if (imageList[i] == image.get()) {
+                currentListIndex = i;
+                break;
+            }
+        }
     }
 
-//    public ImageData(File imageFile) {
-//        this.imageFile = new SimpleObjectProperty<>(imageFile);
-//        Image imgToSet = new Image("file:"+imageFile.getAbsolutePath());
-//        image = new SimpleObjectProperty<>(imgToSet);
-//    }
+    public Image[] getImageList() {
+        return imageList;
+    }
+
+    public void setImageList(Image[] imageList) {
+        this.imageList = imageList;
+    }
 
     public File getImageFile() {
         return imageFile.get();
+    }
+
+    public int getCurrentListIndex() {
+        return currentListIndex;
+    }
+
+    public void setCurrentListIndex(int currentListIndex) {
+        this.currentListIndex = currentListIndex;
     }
 
     public ObjectProperty<File> imageFileProperty() {
@@ -150,18 +170,6 @@ public class ImageData {
 
     public void setImage(Image image) {
         this.image.set(image);
-    }
-
-    public ObservableList<Image> getImageList() {
-        return imageList.get();
-    }
-
-    public ListProperty<Image> imageListProperty() {
-        return imageList;
-    }
-
-    public void setImageList(ObservableList<Image> imageList) {
-        this.imageList.set(imageList);
     }
 
     public ImageView getImageView() {

@@ -47,7 +47,6 @@ public class MainApp extends Application {
         this.primaryStage.setTitle("JImageViewer");
 
         initRootLayout();
-        showStatusBar();
         showFileExplorerTree();
     }
 
@@ -85,9 +84,9 @@ public class MainApp extends Application {
 
         ImageViewPane imageViewPane = new ImageViewPane(imageData.getImageView());
         rootLayout.setCenter(imageViewPane);
-        imageViewPane.getImageView().setImage(imageData.getImage());
+        //imageViewPane.getImageView().setImage(imageData.getImage());
         // Listener for the current image that sets the current image as the image to be in the ImageView
-        getImageData().imageProperty().addListener(((observable, oldValue, newValue) ->
+        imageData.imageProperty().addListener(((observable, oldValue, newValue) ->
                 imageViewPane.getImageView().setImage(newValue)));
         imageViewPane.initializeListeners(this);
 //        try {

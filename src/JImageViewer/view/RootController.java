@@ -10,6 +10,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.RadioMenuItem;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 
 import java.io.File;
@@ -168,12 +169,25 @@ public class RootController {
                 (int)mainApp.getImageData().getImage().getWidth() + " x " +
                 (int)mainApp.getImageData().getImage().getHeight());
 
-        // Show the ImageViewer
+        mainApp.getImageData().refresh();
+
+        // Show the ImageViewer.
         mainApp.showImageViewer();
+        mainApp.showStatusBar();
     }
 
     @FXML
-    private void openImageDir () {}
+    private void openImageDir () throws Exception {
+        DirectoryChooser directoryChooser = new DirectoryChooser();
+
+        // Show choose directory dialog.
+        File imageDir = directoryChooser.showDialog(mainApp.getPrimaryStage());
+
+        mainApp.getImageData().setImageFile(imageDir);
+        mainApp.getImageData().refresh();
+        mainApp.showImageViewer();
+
+    }
 
     @FXML
     private void saveImageAs(){}
@@ -222,6 +236,7 @@ public class RootController {
     @FXML
     private void setRecursiveScanning(){
         mainApp.getImageData().setRecursiveScanning(scanFolderRecursively.isSelected());
+        mainApp.getImageData().refresh();
     }
 
     @FXML

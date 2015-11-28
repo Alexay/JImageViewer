@@ -19,10 +19,7 @@ import java.util.stream.Stream;
  * Used by ImageData to read a certain directory and sort it given the current user settings
  */
 public class ImageFileReader {
-    public static ListProperty<Image> read(Path selectedPath, boolean options[]) {
-
-        // Initialize output object.
-        ListProperty<Image> parsedImages = new SimpleListProperty<>();
+    public static Image[] read(Path selectedPath, boolean options[]) {
 
         List<Path> pathsForSorting = new ArrayList<>();
 
@@ -30,7 +27,7 @@ public class ImageFileReader {
         final Path parsedPath = Files.isDirectory(selectedPath) ? selectedPath : selectedPath.getParent();
 
         // Filter only for images.
-        final PathMatcher filter = parsedPath.getFileSystem().getPathMatcher("glob:*.{jpg,gif,bmp,png}");
+        final PathMatcher filter = parsedPath.getFileSystem().getPathMatcher("glob:**/*.{jpg,bmp,gif,png}");
 
         // Check settings for recursivity and read the paths from the stream.
         if (options[0]) {
@@ -92,30 +89,13 @@ public class ImageFileReader {
             });
         }
 
-        for (Path aPath : pathsForSorting) {
-            parsedImages.add(new Image(aPath.toUri().toString()));
+        // Initialize output object.
+        Image[] parsedImages = new Image[pathsForSorting.size()];
+
+        for (int i = 0; i< parsedImages.length; i++){
+            parsedImages[i] = new Image(pathsForSorting.get(i).toUri().toString());
         }
 
         return parsedImages;
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
