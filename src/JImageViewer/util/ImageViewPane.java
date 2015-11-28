@@ -113,6 +113,5 @@ public class ImageViewPane extends Region {
             // Pass it on to the MainApp
             mainApp.getPixelInfo().setInfoString(pixelInfo);
         });
-
     }
 }

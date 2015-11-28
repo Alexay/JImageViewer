@@ -13,6 +13,8 @@ import javafx.scene.control.SplitPane;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
+import javafx.scene.input.Clipboard;
+import javafx.scene.input.ClipboardContent;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import org.controlsfx.control.StatusBar;
@@ -23,6 +25,10 @@ import java.nio.file.Paths;
 
 public class MainApp extends Application {
 
+    // Initialize the instance of the system clipboard.
+    private final Clipboard clipboard = Clipboard.getSystemClipboard();
+    private final ClipboardContent clipboardContent = new ClipboardContent();
+
     private Stage primaryStage;
     private BorderPane rootLayout;
     // The current image to be set in the ImageView
@@ -31,6 +37,15 @@ public class MainApp extends Application {
     // The information about the pixel that is being hovered over by the mouse
     // in the ImageView
     private final PixelInfo pixelInfo = new PixelInfo();
+
+
+    public Clipboard getClipboard() {
+        return clipboard;
+    }
+
+    public ClipboardContent getClipboardContent() {
+        return clipboardContent;
+    }
 
     public PixelInfo getPixelInfo() {
         return this.pixelInfo;
@@ -83,10 +98,9 @@ public class MainApp extends Application {
 
         ImageViewPane imageViewPane = new ImageViewPane(imageData.getImageView());
         rootLayout.setCenter(imageViewPane);
-        //imageViewPane.getImageView().setImage(imageData.getImage());
         // Listener for the current image that sets the current image as the image to be in the ImageView
-        imageData.imageProperty().addListener(((observable, oldValue, newValue) ->
-                imageViewPane.getImageView().setImage(newValue)));
+        imageData.imageViewProperty().addListener(((observable, oldValue, newValue) ->
+                imageViewPane.setImageView(newValue)));
         imageViewPane.initializeListeners(this);
 //        try {
 //            // Load ImageViewer.

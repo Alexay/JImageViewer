@@ -1,8 +1,10 @@
 package JImageViewer.view;
 
 import JImageViewer.MainApp;
+import JImageViewer.util.RotateImage;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
 import javafx.print.PrinterJob;
 import javafx.scene.control.Button;
@@ -15,6 +17,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 
 public class RootController {
@@ -174,9 +177,9 @@ public class RootController {
         mainApp.getImageData().setImageView(new ImageView(new Image(imageFile.toURI().toString())));
 
         // Set the title of the window to the name of the image + the resolution
-        mainApp.getPrimaryStage().setTitle(imageFile.getName() + " - " +
-                (int)mainApp.getImageData().getImage().getWidth() + " x " +
-                (int)mainApp.getImageData().getImage().getHeight());
+        //mainApp.getPrimaryStage().setTitle(imageFile.getName() + " - " +
+        //        (int)mainApp.getImageData().getImage().getWidth() + " x " +
+        //        (int)mainApp.getImageData().getImage().getHeight());
 
         mainApp.getImageData().refresh();
 
@@ -263,16 +266,28 @@ public class RootController {
     }
 
     @FXML
-    private void imageRotateCounterClockwise(){}
+    private void imageRotateCounterClockwise() throws Exception{
+        BufferedImage buffImg = SwingFXUtils.fromFXImage(mainApp.getImageData().getImageView().getImage(), null);
+        buffImg = RotateImage.getRotatedImage(buffImg, -1); // The "-1" will make Math.PI/2*(-1) go counter clockwise.
+        mainApp.getImageData().getImageView().setImage(SwingFXUtils.toFXImage(buffImg, null));
+    }
 
     @FXML
-    private void imageRotateClockwise(){}
+    private void imageRotateClockwise(){
+        BufferedImage buffImg = SwingFXUtils.fromFXImage(mainApp.getImageData().getImageView().getImage(), null);
+        buffImg = RotateImage.getRotatedImage(buffImg, 1); // The "1" will make Math.PI/2 go clockwise.
+        mainApp.getImageData().getImageView().setImage(SwingFXUtils.toFXImage(buffImg, null));
+    }
 
     @FXML
-    private void copyImage(){}
+    private void copyImage(){
+        mainApp.getClipboardContent().putImage(mainApp.getImageData().getImage());
+    }
 
     @FXML
-    private void pasteImage(){}
+    private void pasteImage(){
+        mainApp.getImageData().getImageView().setImage(mainApp.getClipboardContent().getImage());
+    }
 
     @FXML
     private void engageFullscreen(){}
@@ -284,7 +299,7 @@ public class RootController {
     private void imageZoomOut(){}
 
     @FXML
-    private void toggleToolbar(){
+    private void toggleToolbar() {
         if (toolbar.isSelected())
             vbox.getChildren().add(toolBar);
         else
