@@ -47,7 +47,6 @@ public class MainApp extends Application {
         this.primaryStage.setTitle("JImageViewer");
 
         initRootLayout();
-        showFileExplorerTree();
     }
 
     /**

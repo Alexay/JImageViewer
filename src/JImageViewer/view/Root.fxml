@@ -15,7 +15,7 @@
 
 <BorderPane prefHeight="649.0" prefWidth="957.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="JImageViewer.view.RootController">
    <top>
-      <VBox BorderPane.alignment="CENTER">
+      <VBox fx:id="vbox" BorderPane.alignment="CENTER">
          <children>
             <MenuBar prefHeight="25.0" prefWidth="597.0">
                <menus>
@@ -159,7 +159,10 @@
                               <KeyCodeCombination alt="UP" code="F" control="UP" meta="ANY" shift="UP" shortcut="UP" />
                            </accelerator>
                         </RadioMenuItem>
-                        <RadioMenuItem fx:id="metadataInfo" mnemonicParsing="false" onAction="#toggleMetadataInfo" text="_Metadata Info" />
+                        <RadioMenuItem fx:id="metadataInfo" onAction="#toggleMetadataInfo" text="_Metadata Info">
+                           <accelerator>
+                              <KeyCodeCombination alt="UP" code="M" control="UP" meta="ANY" shift="UP" shortcut="UP" />
+                           </accelerator></RadioMenuItem>
                      </items>
                   </Menu>
                   <Menu text="_Help">
@@ -172,7 +175,7 @@
                   </Menu>
                </menus>
             </MenuBar>
-            <ToolBar prefHeight="41.0" prefWidth="957.0">
+            <ToolBar fx:id="toolBar" prefHeight="41.0" prefWidth="957.0">
               <items>
                 <Button fx:id="previousButton" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0">
                      <graphic>

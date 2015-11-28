@@ -8,14 +8,23 @@ import javafx.print.PrinterJob;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.RadioMenuItem;
+import javafx.scene.control.ToolBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 
 import java.io.File;
 
 public class RootController {
+
+    @FXML
+    private VBox vbox;
+
+    @FXML
+    private ToolBar toolBar;
+
     @FXML
     private MenuItem open;
 
@@ -187,7 +196,6 @@ public class RootController {
         mainApp.getImageData().refresh();
         mainApp.showImageViewer();
         mainApp.showStatusBar();
-
     }
 
     @FXML
@@ -276,7 +284,12 @@ public class RootController {
     private void imageZoomOut(){}
 
     @FXML
-    private void toggleToolbar(){}
+    private void toggleToolbar(){
+        if (toolbar.isSelected())
+            vbox.getChildren().add(toolBar);
+        else
+            vbox.getChildren().remove(toolBar);
+    }
 
     @FXML
     private void toggleStatusbar(){
