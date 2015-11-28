@@ -284,8 +284,6 @@ public class RootController {
     @FXML
     private void displayAboutWindow(){}
 
-
-
     /**
      * This is an actually working method that actually prints the current image. I was amazed at how easy it was
      * to implement. Normally, working with printers is a nightmare.

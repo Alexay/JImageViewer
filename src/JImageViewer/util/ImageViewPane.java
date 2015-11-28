@@ -6,7 +6,6 @@ package JImageViewer.util;
  */
 
 import JImageViewer.MainApp;
-import JImageViewer.view.ImageViewerController;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;

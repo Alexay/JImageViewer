@@ -45,14 +45,8 @@ public class ImageData {
      * displaying.
      */
     public void refresh() {
-        final Path p = imageFile.get().toPath().getParent();
-        final PathMatcher filter = p.getFileSystem().getPathMatcher("glob:*.{jpg,gif,bmp,png}");
-        try (final Stream<Path> stream = Files.list(p)) {
-            stream.filter(filter::matches)
-                    .forEach(System.out::println);
-        } catch (IOException e){
-            System.err.println("Refresh method of the ImageData model caused: " + e);
-        }
+        // Putting all the user settings into an array to pass on to the ImageFileReader
+        final boolean[] userSettings = {recursiveScanning.get(), sortByFilename.get(), sortByDateCreated.get(),sortByDateModified.get(), sortByAscending.get(), sortByDescending.get()};
 
     }
 
