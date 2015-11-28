@@ -38,9 +38,6 @@ public class RootController {
     private MenuItem saveAs;
 
     @FXML
-    private MenuItem rename;
-
-    @FXML
     private MenuItem print;
 
     @FXML
@@ -205,9 +202,6 @@ public class RootController {
     private void saveImageAs(){}
 
     @FXML
-    private void fileRename(){}
-
-    @FXML
     private void setSortByFilename(){
         mainApp.getImageData().setSortByFilename(true);
         mainApp.getImageData().setSortByDateCreated(false);
@@ -255,10 +249,24 @@ public class RootController {
     private void reloadImageFile(){}
 
     @FXML
-    private void previousImage(){}
+    private void previousImage(){
+        int prevImageIndex = mainApp.getImageData().getCurrentListIndex()-1;
+        if (mainApp.getImageData().getCurrentListIndex()==0)
+            prevImageIndex = mainApp.getImageData().getImageArray().length-1;
+        mainApp.getImageData().setImage(mainApp.getImageData().getImageArray()[prevImageIndex]);
+        mainApp.getImageData().setImageFile(mainApp.getImageData().getPathList().get(prevImageIndex).toFile());
+        mainApp.getImageData().setCurrentListIndex(prevImageIndex);
+    }
 
     @FXML
-    private void nextImage(){}
+    private void nextImage(){
+        int nextImageIndex = mainApp.getImageData().getCurrentListIndex()+1;
+        if (mainApp.getImageData().getCurrentListIndex()==mainApp.getImageData().getImageArray().length-1)
+            nextImageIndex = 0;
+        mainApp.getImageData().setImage(mainApp.getImageData().getImageArray()[nextImageIndex]);
+        mainApp.getImageData().setImageFile(mainApp.getImageData().getPathList().get(nextImageIndex).toFile());
+        mainApp.getImageData().setCurrentListIndex(nextImageIndex);
+    }
 
     @FXML
     private void exitProgram(){
@@ -267,16 +275,16 @@ public class RootController {
 
     @FXML
     private void imageRotateCounterClockwise() throws Exception{
-        BufferedImage buffImg = SwingFXUtils.fromFXImage(mainApp.getImageData().getImageView().getImage(), null);
+        BufferedImage buffImg = SwingFXUtils.fromFXImage(mainApp.getImageData().getImage(), null);
         buffImg = RotateImage.getRotatedImage(buffImg, -1); // The "-1" will make Math.PI/2*(-1) go counter clockwise.
-        mainApp.getImageData().getImageView().setImage(SwingFXUtils.toFXImage(buffImg, null));
+        mainApp.getImageData().setImage(SwingFXUtils.toFXImage(buffImg, null));
     }
 
     @FXML
     private void imageRotateClockwise(){
-        BufferedImage buffImg = SwingFXUtils.fromFXImage(mainApp.getImageData().getImageView().getImage(), null);
+        BufferedImage buffImg = SwingFXUtils.fromFXImage(mainApp.getImageData().getImage(), null);
         buffImg = RotateImage.getRotatedImage(buffImg, 1); // The "1" will make Math.PI/2 go clockwise.
-        mainApp.getImageData().getImageView().setImage(SwingFXUtils.toFXImage(buffImg, null));
+        mainApp.getImageData().setImage(SwingFXUtils.toFXImage(buffImg, null));
     }
 
     @FXML

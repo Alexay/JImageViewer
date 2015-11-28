@@ -78,7 +78,6 @@ public class ImageData {
             }
         imageView.set(new ImageView(image.get()));
         imageFile.set(pathList.get(currentListIndex).toFile());
-        image.set(imageArray[currentListIndex]);
     }
 
     /**
@@ -114,7 +113,6 @@ public class ImageData {
         }
         imageView.set(new ImageView(image.get()));
         imageFile.set(pathList.get(currentListIndex).toFile());
-        image.set(imageArray[currentListIndex]);
     }
 
     public Image[] getImageArray() {
@@ -125,8 +123,12 @@ public class ImageData {
         this.imageArray = imageArray;
     }
 
-    public File getImageFile() {
-        return imageFile.get();
+    public List<Path> getPathList() {
+        return pathList;
+    }
+
+    public void setPathList(List<Path> pathList) {
+        this.pathList = pathList;
     }
 
     public int getCurrentListIndex() {
@@ -137,12 +139,40 @@ public class ImageData {
         this.currentListIndex = currentListIndex;
     }
 
+    public File getImageFile() {
+        return imageFile.get();
+    }
+
     public ObjectProperty<File> imageFileProperty() {
         return imageFile;
     }
 
     public void setImageFile(File imageFile) {
         this.imageFile.set(imageFile);
+    }
+
+    public Image getImage() {
+        return image.get();
+    }
+
+    public ObjectProperty<Image> imageProperty() {
+        return image;
+    }
+
+    public void setImage(Image image) {
+        this.image.set(image);
+    }
+
+    public ImageView getImageView() {
+        return imageView.get();
+    }
+
+    public ObjectProperty<ImageView> imageViewProperty() {
+        return imageView;
+    }
+
+    public void setImageView(ImageView imageView) {
+        this.imageView.set(imageView);
     }
 
     public boolean getRecursiveScanning() {
@@ -215,29 +245,5 @@ public class ImageData {
 
     public void setSortByDescending(boolean sortByDescending) {
         this.sortByDescending.set(sortByDescending);
-    }
-
-    public Image getImage() {
-        return image.get();
-    }
-
-    public ObjectProperty<Image> imageProperty() {
-        return image;
-    }
-
-    public void setImage(Image image) {
-        this.image.set(image);
-    }
-
-    public ImageView getImageView() {
-        return imageView.get();
-    }
-
-    public ObjectProperty<ImageView> imageViewProperty() {
-        return imageView;
-    }
-
-    public void setImageView(ImageView imageView) {
-        this.imageView.set(imageView);
     }
 }

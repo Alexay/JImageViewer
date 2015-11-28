@@ -99,8 +99,8 @@ public class MainApp extends Application {
         ImageViewPane imageViewPane = new ImageViewPane(imageData.getImageView());
         rootLayout.setCenter(imageViewPane);
         // Listener for the current image that sets the current image as the image to be in the ImageView
-        imageData.imageViewProperty().addListener(((observable, oldValue, newValue) ->
-                imageViewPane.setImageView(newValue)));
+        imageData.imageProperty().addListener(((observable, oldValue, newValue) ->
+                imageViewPane.getImageView().setImage(newValue)));
         imageViewPane.initializeListeners(this);
 //        try {
 //            // Load ImageViewer.
