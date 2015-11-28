@@ -1,16 +1,14 @@
 package JImageViewer.view;
 
 import JImageViewer.MainApp;
+import JImageViewer.util.FilePathTreeItem;
 import JImageViewer.util.RotateImage;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
 import javafx.print.PrinterJob;
-import javafx.scene.control.Button;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.RadioMenuItem;
-import javafx.scene.control.ToolBar;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
@@ -22,8 +20,14 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.nio.file.FileSystems;
+import java.nio.file.Path;
 
 public class RootController {
+
+    private TreeView<String> treeView;
 
     @FXML
     private VBox vbox;
@@ -87,6 +91,9 @@ public class RootController {
 
     @FXML
     private MenuItem rotateClockwise;
+
+    @FXML
+    private MenuItem thumbnailView;
 
     @FXML
     private MenuItem fullscreen;
@@ -325,6 +332,12 @@ public class RootController {
     private void engageFullscreen(){}
 
     @FXML
+    private void engageThumbnailView(){
+        mainApp.hideImageViewer();
+        mainApp.showThumbnailView();
+    }
+
+    @FXML
     private void imageZoomIn(){}
 
     @FXML
@@ -348,8 +361,23 @@ public class RootController {
 
     @FXML
     private void toggleFileExplorer(){
-        if (fileExplorer.isSelected())
+        if (fileExplorer.isSelected()) {
+            treeView = mainApp.getTreeView();
+            //populate file browser
+            String hostName=null;
+            try{hostName= InetAddress.getLocalHost().getHostName();}catch(UnknownHostException x){ System.out.println(x);} //TODO error dialog
+            assert hostName != null : "Unable to get local host name.";
+            TreeItem<String> rootNode=new TreeItem<>(hostName,new ImageView(new Image("file:./computer.png")));
+            Iterable<Path> rootDirectories= FileSystems.getDefault().getRootDirectories();
+            for(Path name:rootDirectories){
+                FilePathTreeItem treeNode=new FilePathTreeItem(new File(name.toString()));
+                rootNode.getChildren().add(treeNode);
+            }
+            rootNode.setExpanded(true);
+            treeView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+            treeView.setRoot(rootNode);
             mainApp.showFileExplorerTree();
+        }
         else
             mainApp.hideFileExplorerTree();
     }

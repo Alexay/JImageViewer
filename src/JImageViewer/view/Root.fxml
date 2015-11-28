@@ -116,6 +116,11 @@
                   </Menu>
                   <Menu text="_View">
                      <items>
+                        <MenuItem fx:id="thumbnailView" onAction="#engageThumbnailView" text="_Thumbnail View">
+                           <accelerator>
+                              <KeyCodeCombination alt="UP" code="T" control="UP" meta="ANY" shift="UP" shortcut="UP" />
+                           </accelerator>
+                        </MenuItem>
                         <MenuItem fx:id="fullscreen" onAction="#engageFullscreen" text="_Fullscreen">
                            <accelerator>
                               <KeyCodeCombination alt="UP" code="F11" control="UP" meta="ANY" shift="UP" shortcut="UP" />

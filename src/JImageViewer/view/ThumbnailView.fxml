@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import org.controlsfx.control.*?>
+<?import org.controlsfx.control.cell.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+
+<VBox alignment="CENTER" style="-fx-background-color: #b2b2e6;" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="JImageViewer.view.ThumbnailViewController">
+   <children>
+      <GridView fx:id="gridView" />
+   </children>
+</VBox>

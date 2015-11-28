@@ -2,6 +2,8 @@ package JImageViewer.model;
 
 import JImageViewer.util.ImageFileReader;
 import javafx.beans.property.*;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
@@ -10,6 +12,7 @@ import java.nio.file.Path;
 import java.util.List;
 
 public class ImageData {
+    private final ObservableList<Image> imageObservableList = FXCollections.observableArrayList();
     private Image[] imageArray;
     private List<Path> pathList;
     private int currentListIndex;
@@ -51,9 +54,11 @@ public class ImageData {
         pathList = ImageFileReader.read(imageFile.get().toPath(), userSettings);
         ImageFileReader.sort(pathList, userSettings);
 
+        imageObservableList.clear();
         imageArray = new Image[pathList.size()];
         for (int i = 0; i< pathList.size(); i++){
             imageArray[i] = new Image(pathList.get(i).toUri().toString());
+            imageObservableList.add(imageArray[i]);
         }
 
         // Set the current list index
@@ -86,9 +91,11 @@ public class ImageData {
         boolean[] userSettings = {recursiveScanning.get(), sortByFilename.get(), sortByDateCreated.get(),sortByDateModified.get(), sortByAscending.get(), sortByDescending.get()};
         ImageFileReader.sort(pathList, userSettings);
 
+        imageObservableList.clear();
         imageArray = new Image[pathList.size()];
         for (int i = 0; i< pathList.size(); i++){
             imageArray[i] = new Image(pathList.get(i).toUri().toString());
+            imageObservableList.add(imageArray[i]);
         }
 
         // Set the current list index
@@ -111,6 +118,10 @@ public class ImageData {
         }
         imageView.set(new ImageView(image.get()));
         imageFile.set(pathList.get(currentListIndex).toFile());
+    }
+
+    public ObservableList<Image> getImageObservableList() {
+        return imageObservableList;
     }
 
     public Image[] getImageArray() {

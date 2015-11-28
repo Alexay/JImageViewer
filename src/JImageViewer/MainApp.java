@@ -2,32 +2,24 @@ package JImageViewer;
 
 import JImageViewer.model.ImageData;
 import JImageViewer.model.PixelInfo;
-import JImageViewer.util.FilePathTreeItem;
 import JImageViewer.util.ImageViewPane;
-import JImageViewer.util.SimpleFileTreeItem;
 import JImageViewer.view.RootController;
 import JImageViewer.view.StatusBarController;
+import JImageViewer.view.ThumbnailViewController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Insets;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.TreeView;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import org.controlsfx.control.GridView;
 import org.controlsfx.control.StatusBar;
 
 import java.io.IOException;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.nio.file.FileSystems;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 public class MainApp extends Application {
 
@@ -37,6 +29,7 @@ public class MainApp extends Application {
 
     private Stage primaryStage;
     private BorderPane rootLayout;
+    private TreeView<String> treeView = new TreeView<>();
     // The current image to be set in the ImageView
     private final ImageData imageData = new ImageData();
 
@@ -59,6 +52,10 @@ public class MainApp extends Application {
 
     public ImageData getImageData() {
         return this.imageData;
+    }
+
+    public TreeView<String> getTreeView() {
+        return treeView;
     }
 
     public MainApp() {}
@@ -131,6 +128,26 @@ public class MainApp extends Application {
         rootLayout.setCenter(null);
     }
 
+    public void showThumbnailView(){
+        try {
+            // Load ImageViewer.
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(MainApp.class.getResource("view/ThumbnailView.fxml"));
+            VBox gridView = loader.load();
+
+            // Set the ImageViewer into the center of root layout.
+            rootLayout.setCenter(gridView);
+
+            // Giving the controller access to the main app.
+            ThumbnailViewController controller = loader.getController();
+            controller.setMainApp(this);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.err.println("ThumbnailView layout loading error.");
+        }
+    }
+
     /**
      * Shows the StatusBar inside the root layout.
      */
@@ -158,26 +175,6 @@ public class MainApp extends Application {
 
 
     public void showFileExplorerTree() {
-//create tree pane
-        VBox treeBox=new VBox();
-        treeBox.setPadding(new Insets(10,10,10,10));
-        treeBox.setSpacing(10);
-        //setup the file browser root
-        String hostName="computer";
-        try{hostName= InetAddress.getLocalHost().getHostName();}catch(UnknownHostException x){}
-        TreeItem<String> rootNode=new TreeItem<>(hostName,new ImageView(new Image("file:/../util/computer.png")));
-        Iterable<Path> rootDirectories= FileSystems.getDefault().getRootDirectories();
-        for(Path name:rootDirectories){
-            FilePathTreeItem treeNode=new FilePathTreeItem(name.toFile());
-            rootNode.getChildren().add(treeNode);
-        }
-        rootNode.setExpanded(true);
-        //create the tree view
-        TreeView<String> treeView = new TreeView<>(rootNode);
-        //add everything to the tree pane
-        treeBox.getChildren().addAll(new Label("File browser"),treeView);
-        VBox.setVgrow(treeView, Priority.ALWAYS);
-
         rootLayout.setLeft(treeView);
     }
 
