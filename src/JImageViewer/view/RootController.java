@@ -13,12 +13,15 @@ import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.ToolBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.image.WritableImage;
 import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 
+import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 
 public class RootController {
 
@@ -199,7 +202,26 @@ public class RootController {
     }
 
     @FXML
-    private void saveImageAs(){}
+    private void saveImageAs(){
+        FileChooser fileChooser = new FileChooser();
+
+        // Set extension filters.
+        FileChooser.ExtensionFilter extFilterPNG = new FileChooser.ExtensionFilter("PNG image (*.png)", "*.png");
+        FileChooser.ExtensionFilter extFilterGIF = new FileChooser.ExtensionFilter("GIF image (*.gif)", "*.gif");
+        fileChooser.getExtensionFilters().addAll(extFilterPNG, extFilterGIF);
+
+        // Show save file dialog.
+        File savedFile = fileChooser.showSaveDialog(mainApp.getPrimaryStage());
+
+        // Convert the image to a Swing image and use ImageIO to write it to the savedFile.
+        try {
+            BufferedImage bufferedImage = new BufferedImage((int)mainApp.getImageData().getImage().getWidth(), (int)mainApp.getImageData().getImage().getHeight(), BufferedImage.TYPE_INT_RGB);
+            ImageIO.write(SwingFXUtils.fromFXImage(mainApp.getImageData().getImage(), bufferedImage),
+                    savedFile.toString().substring(savedFile.toString().length()-3,savedFile.toString().length()), savedFile);
+        } catch (IOException ex) {
+            System.out.println(ex.getMessage());
+        }
+    }
 
     @FXML
     private void setSortByFilename(){
@@ -246,7 +268,9 @@ public class RootController {
     }
 
     @FXML
-    private void reloadImageFile(){}
+    private void reloadImageFile(){
+        mainApp.getImageData().refresh();
+    }
 
     @FXML
     private void previousImage(){
