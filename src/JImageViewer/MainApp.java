@@ -2,24 +2,30 @@ package JImageViewer;
 
 import JImageViewer.model.ImageData;
 import JImageViewer.model.PixelInfo;
+import JImageViewer.util.FilePathTreeItem;
 import JImageViewer.util.ImageViewPane;
 import JImageViewer.util.SimpleFileTreeItem;
 import JImageViewer.view.RootController;
 import JImageViewer.view.StatusBarController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
-import javafx.scene.control.SplitPane;
-import javafx.scene.control.TreeCell;
-import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeView;
+import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.controlsfx.control.StatusBar;
 
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -152,26 +158,27 @@ public class MainApp extends Application {
 
 
     public void showFileExplorerTree() {
+//create tree pane
+        VBox treeBox=new VBox();
+        treeBox.setPadding(new Insets(10,10,10,10));
+        treeBox.setSpacing(10);
+        //setup the file browser root
+        String hostName="computer";
+        try{hostName= InetAddress.getLocalHost().getHostName();}catch(UnknownHostException x){}
+        TreeItem<String> rootNode=new TreeItem<>(hostName,new ImageView(new Image("file:/../util/computer.png")));
+        Iterable<Path> rootDirectories= FileSystems.getDefault().getRootDirectories();
+        for(Path name:rootDirectories){
+            FilePathTreeItem treeNode=new FilePathTreeItem(name.toFile());
+            rootNode.getChildren().add(treeNode);
+        }
+        rootNode.setExpanded(true);
+        //create the tree view
+        TreeView<String> treeView = new TreeView<>(rootNode);
+        //add everything to the tree pane
+        treeBox.getChildren().addAll(new Label("File browser"),treeView);
+        VBox.setVgrow(treeView, Priority.ALWAYS);
 
-        TreeItem<Path> root = new SimpleFileTreeItem(
-                Paths.get(System.getProperty("user.dir")));
-        root.setExpanded(true);
-        TreeView<Path> treeView1 = new TreeView<Path>(root);
-        treeView1.setCellFactory(treeView -> new TreeCell<Path>() {
-            @Override
-            public void updateItem(Path path, boolean empty) {
-                super.updateItem(path, empty);
-                if (empty) {
-                    setText(null);
-                } else {
-                    setText(path.getFileName().toString());
-                }
-            }
-        });
-
-        SplitPane fileExplorerPane = new SplitPane(treeView1);
-
-        rootLayout.setLeft(fileExplorerPane);
+        rootLayout.setLeft(treeView);
     }
 
     public void hideFileExplorerTree(){
