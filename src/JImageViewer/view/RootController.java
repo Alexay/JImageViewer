@@ -186,6 +186,7 @@ public class RootController {
         mainApp.getImageData().setImageFile(imageDir);
         mainApp.getImageData().refresh();
         mainApp.showImageViewer();
+        mainApp.showStatusBar();
 
     }
 
@@ -200,7 +201,7 @@ public class RootController {
         mainApp.getImageData().setSortByFilename(true);
         mainApp.getImageData().setSortByDateCreated(false);
         mainApp.getImageData().setSortByDateModified(false);
-        mainApp.getImageData().refresh();
+        mainApp.getImageData().reSort();
     }
 
     @FXML
@@ -208,7 +209,7 @@ public class RootController {
         mainApp.getImageData().setSortByFilename(false);
         mainApp.getImageData().setSortByDateCreated(true);
         mainApp.getImageData().setSortByDateModified(false);
-        mainApp.getImageData().refresh();
+        mainApp.getImageData().reSort();
     }
 
     @FXML
@@ -216,21 +217,21 @@ public class RootController {
         mainApp.getImageData().setSortByFilename(false);
         mainApp.getImageData().setSortByDateCreated(false);
         mainApp.getImageData().setSortByDateModified(true);
-        mainApp.getImageData().refresh();
+        mainApp.getImageData().reSort();
     }
 
     @FXML
     private void setSortByAscending(){
         mainApp.getImageData().setSortByAscending(true);
         mainApp.getImageData().setSortByDescending(false);
-        mainApp.getImageData().refresh();
+        mainApp.getImageData().reSort();
     }
 
     @FXML
     private void setSortByDescending(){
         mainApp.getImageData().setSortByAscending(false);
         mainApp.getImageData().setSortByDescending(true);
-        mainApp.getImageData().refresh();
+        mainApp.getImageData().reSort();
     }
 
     @FXML

@@ -1,7 +1,5 @@
 package JImageViewer.util;
 
-import javafx.beans.property.ListProperty;
-import javafx.beans.property.SimpleListProperty;
 import javafx.scene.image.Image;
 
 import java.io.IOException;
@@ -19,7 +17,8 @@ import java.util.stream.Stream;
  * Used by ImageData to read a certain directory and sort it given the current user settings
  */
 public class ImageFileReader {
-    public static Image[] read(Path selectedPath, boolean options[]) {
+
+    public static List<Path> read(Path selectedPath, boolean options[]) {
 
         List<Path> pathsForSorting = new ArrayList<>();
 
@@ -45,7 +44,10 @@ public class ImageFileReader {
                 System.err.println("Non-recursive reading failed: " + e);
             }
         }
+        return pathsForSorting;
+    }
 
+    public static void sort (List<Path> pathsForSorting, boolean[] options) {
         // Sorting based on user settings.
         // By Filename.
         if (options[1]) {
@@ -88,14 +90,5 @@ public class ImageFileReader {
                 return 0;
             });
         }
-
-        // Initialize output object.
-        Image[] parsedImages = new Image[pathsForSorting.size()];
-
-        for (int i = 0; i< parsedImages.length; i++){
-            parsedImages[i] = new Image(pathsForSorting.get(i).toUri().toString());
-        }
-
-        return parsedImages;
     }
 }

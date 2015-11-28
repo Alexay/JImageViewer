@@ -10,9 +10,12 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 import java.io.File;
+import java.nio.file.Path;
+import java.util.List;
 
 public class ImageData {
-    private Image[] imageList;
+    private Image[] imageArray;
+    private List<Path> pathList;
     private int currentListIndex;
     private final ObjectProperty<File> imageFile;
     private final ObjectProperty<Image> image;
@@ -38,34 +41,88 @@ public class ImageData {
 
 
     /**
-     * Must be called any time the "Open" or Open Directory" application functions are used or if sorting setting
-     * are changed. This method parses the sorting setting and generates a list of images for the image viewer's
+     * Must be called any time the "Open" or Open Directory" application functions are used or if the recursivity setting
+     * is changed. This method parses the sorting setting and generates a list of images for the image viewer's
      * displaying.
      */
     public void refresh() {
         // Putting all the user settings into an array to pass on to the ImageFileReader.
-        final boolean[] userSettings = {recursiveScanning.get(), sortByFilename.get(), sortByDateCreated.get(),sortByDateModified.get(), sortByAscending.get(), sortByDescending.get()};
+        boolean[] userSettings = {recursiveScanning.get(), sortByFilename.get(), sortByDateCreated.get(),sortByDateModified.get(), sortByAscending.get(), sortByDescending.get()};
 
-        // Setting the current imageList to be parsed based on the current path and current settings.
-        imageList = ImageFileReader.read(imageFile.get().toPath(), userSettings);
+        // Setting the current imageArray to be parsed based on the current path and current settings.
+        pathList = ImageFileReader.read(imageFile.get().toPath(), userSettings);
+        ImageFileReader.sort(pathList, userSettings);
+
+        imageArray = new Image[pathList.size()];
+        for (int i = 0; i< pathList.size(); i++){
+            imageArray[i] = new Image(pathList.get(i).toUri().toString());
+        }
 
         // Set the current list index
-        for (int i = 0 ; i < imageList.length ; i++) {
-            if (image.get()==null)
-                image.set(imageList[0]);
-            else if (imageList[i] == image.get()) {
-                currentListIndex = i;
-                break;
+            if (image.get()==null) {
+                image.set(imageArray[0]);
+                imageFile.set(pathList.get(0).toFile());
+                currentListIndex = 0;
+            }
+            else if (imageFile.get().isDirectory()) {
+                image.set(imageArray[0]);
+                currentListIndex = 0;
+            }
+            else {
+                for (int i = 0; i < imageArray.length; i++) {
+                    if (imageArray[i] == image.get()) {
+                        currentListIndex = i;
+                        break;
+                    }
+                }
+            }
+        imageView.set(new ImageView(image.get()));
+        imageFile.set(pathList.get(currentListIndex).toFile());
+        image.set(imageArray[currentListIndex]);
+    }
+
+    /**
+     * Due to the refresh causing recursive folder entering to loose track of the parent images, the reSort method
+     * was made to avoid reinitializing the pathList.
+     */
+    public void reSort() {
+        boolean[] userSettings = {recursiveScanning.get(), sortByFilename.get(), sortByDateCreated.get(),sortByDateModified.get(), sortByAscending.get(), sortByDescending.get()};
+        ImageFileReader.sort(pathList, userSettings);
+
+        imageArray = new Image[pathList.size()];
+        for (int i = 0; i< pathList.size(); i++){
+            imageArray[i] = new Image(pathList.get(i).toUri().toString());
+        }
+
+        // Set the current list index
+        if (image.get()==null) {
+            image.set(imageArray[0]);
+            imageFile.set(pathList.get(0).toFile());
+            currentListIndex = 0;
+        }
+        else if (imageFile.get().isDirectory()) {
+            image.set(imageArray[0]);
+            currentListIndex = 0;
+        }
+        else {
+            for (int i = 0; i < imageArray.length; i++) {
+                if (imageArray[i] == image.get()) {
+                    currentListIndex = i;
+                    break;
+                }
             }
         }
+        imageView.set(new ImageView(image.get()));
+        imageFile.set(pathList.get(currentListIndex).toFile());
+        image.set(imageArray[currentListIndex]);
     }
 
-    public Image[] getImageList() {
-        return imageList;
+    public Image[] getImageArray() {
+        return imageArray;
     }
 
-    public void setImageList(Image[] imageList) {
-        this.imageList = imageList;
+    public void setImageArray(Image[] imageArray) {
+        this.imageArray = imageArray;
     }
 
     public File getImageFile() {
