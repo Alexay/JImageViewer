@@ -7,13 +7,19 @@ import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.print.PrinterJob;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -431,7 +437,22 @@ public class RootController {
     }
 
     @FXML
-    private void displayAboutWindow(){}
+    private void displayAboutWindow() {
+        Stage aboutScreen = new Stage();
+        aboutScreen.initModality(Modality.WINDOW_MODAL);
+        Button closeAbout = new Button("Close");
+        closeAbout.setMnemonicParsing(true);
+        closeAbout.setOnAction(event -> aboutScreen.close());
+
+        VBox aboutVBox = new VBox(50);
+        aboutVBox.getChildren().addAll(new Text("That author is Alex!"), closeAbout);
+        aboutVBox.setAlignment(Pos.CENTER);
+        AnchorPane aboutAnchor = new AnchorPane(aboutVBox);
+
+        Scene aboutScreenScene = new Scene(aboutAnchor);
+        aboutScreen.setScene(aboutScreenScene);
+        aboutScreen.show();
+    }
 
     /**
      * This is an actually working method that actually prints the current image. I was amazed at how easy it was
