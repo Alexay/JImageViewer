@@ -8,13 +8,16 @@ import JImageViewer.view.MetadataViewController;
 import JImageViewer.view.RootController;
 import JImageViewer.view.StatusBarController;
 import JImageViewer.view.ThumbnailViewController;
+import com.drew.imaging.ImageProcessingException;
 import javafx.application.Application;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TreeView;
+import javafx.scene.image.Image;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.MouseEvent;
@@ -127,6 +130,7 @@ public class MainApp extends Application {
     }
 
     public void showZoomPane() throws Exception {
+        imageData.refresh();
         ScrollPane scrollPane = new ScrollPane();
         final DoubleProperty zoomProperty = new SimpleDoubleProperty(1.0d);
         final DoubleProperty deltaY = new SimpleDoubleProperty(0.0d);
@@ -191,7 +195,7 @@ public class MainApp extends Application {
 
     public void showMetadataView(){
         try {
-            // Load Metadata layout from fxml file.
+            // Load MetadataModel layout from fxml file.
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(MainApp.class.getResource("view/MetadataView.fxml"));
             AnchorPane metadataView = loader.load();
@@ -207,6 +211,8 @@ public class MainApp extends Application {
         } catch (IOException e) {
             e.printStackTrace();
             System.err.println("Metadata layout loading error.");
+        } catch (ImageProcessingException e) {
+            e.printStackTrace();
         }
     }
 

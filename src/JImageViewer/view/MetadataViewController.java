@@ -1,15 +1,20 @@
 package JImageViewer.view;
 
-import JImageViewer.MainApp;
-import com.sun.javafx.collections.MappingChange;
-import javafx.fxml.FXML;
-import javafx.scene.control.TableView;
-import javafx.scene.image.Image;
-import javafx.scene.media.Media;
-import org.controlsfx.control.GridView;
 
-import javax.swing.table.TableColumn;
-import java.util.Map;
+import JImageViewer.MainApp;
+import JImageViewer.model.MetadataModel;
+import com.drew.imaging.ImageMetadataReader;
+import com.drew.imaging.ImageProcessingException;
+import com.drew.metadata.Directory;
+import com.drew.metadata.Metadata;
+import com.drew.metadata.Tag;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.fxml.FXML;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+
+import java.io.IOException;
 
 /**
  * StatusBar holds information about the pixel that is being hovered over, file information, button information.
@@ -17,14 +22,16 @@ import java.util.Map;
 
 public class MetadataViewController {
 
-    @FXML
-    private TableView<String> tableView;
+    ObservableList<MetadataModel> currentImageMetadata = FXCollections.observableArrayList();
 
     @FXML
-    private TableColumn key;
+    private TableView<MetadataModel> tableView;
 
     @FXML
-    private TableColumn value;
+    private TableColumn<MetadataModel, String> key;
+
+    @FXML
+    private TableColumn<MetadataModel, String> value;
 
     private MainApp mainApp;
 
@@ -40,14 +47,43 @@ public class MetadataViewController {
      * after the fxml file has been loaded.
      */
     @FXML
-    private void initialize() {;
+    private void initialize() {
+        key.setCellValueFactory(param -> param.getValue().tagProperty());
+        value.setCellValueFactory(param -> param.getValue().descriptionProperty());
     }
 
     /**
      * Is called by the main application to give a reference back to itself.
      *
      */
-    public void setMainApp(MainApp mainApp) {
+    public void setMainApp(MainApp mainApp) throws ImageProcessingException, IOException {
         this.mainApp = mainApp;
+        currentImageMetadata.clear();
+        // Parse metadata of the image file.
+        if (mainApp.getImageData().getImageFile()==null)
+            System.out.println("No image, ignoring...");
+        else {
+            Metadata imageMetadata = ImageMetadataReader.readMetadata(mainApp.getImageData().getImageFile());
+            for (Directory directory : imageMetadata.getDirectories()) {
+                for (Tag tag : directory.getTags()) {
+                    currentImageMetadata.add(new MetadataModel(tag.getTagName(), tag.getDescription()));
+                }
+            }
+        }
+        tableView.setItems(currentImageMetadata);
+
+        mainApp.getImageData().imageFileProperty().addListener((observable, oldValue, newValue) -> { try {
+            Metadata newImageMetadata = ImageMetadataReader.readMetadata(mainApp.getImageData().getImageFile());
+            currentImageMetadata.clear();
+            for (Directory directory : newImageMetadata.getDirectories()) {
+                for (Tag tag : directory.getTags()) {
+                    currentImageMetadata.add(new MetadataModel(tag.getTagName(), tag.getDescription()));
+                }
+            }
+            tableView.setItems(currentImageMetadata);
+        } catch (Exception i) {
+            System.err.println("New image metadata parsing error: " + i);
+        }
+        });
     }
 }

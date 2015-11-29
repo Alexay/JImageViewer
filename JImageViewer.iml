@@ -9,5 +9,6 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="controlsfx-8.40.10" level="project" />
+    <orderEntry type="library" name="com.drewnoakes:metadata-extractor:2.8.1" level="project" />
   </component>
 </module>

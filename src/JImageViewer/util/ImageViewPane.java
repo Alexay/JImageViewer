@@ -117,6 +117,7 @@ public class ImageViewPane extends Region {
 
         mainApp.getImageData().getImageView().setOnScroll(event -> { try {
             mainApp.hideImageViewer();
+
             mainApp.showZoomPane();
         } catch (Exception ignore){}
         });

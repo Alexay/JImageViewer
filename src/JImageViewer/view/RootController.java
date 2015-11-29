@@ -423,7 +423,11 @@ public class RootController {
 
     @FXML
     private void toggleMetadataInfo(){
-        mainApp.hideMetadataView();
+        if (metadataInfo.isSelected()) {
+            mainApp.showMetadataView();
+        }
+        else
+            mainApp.hideMetadataView();
     }
 
     @FXML
