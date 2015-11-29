@@ -378,7 +378,8 @@ public class RootController {
             String hostName=null;
             try{hostName= InetAddress.getLocalHost().getHostName();}catch(UnknownHostException x){ System.out.println(x);}
             assert hostName != null : "Unable to get local host name.";
-            TreeItem<String> rootNode=new TreeItem<>(hostName,new ImageView(new Image("file:./computer.png")));
+            final String currentDir = System.getProperty("user.dir");
+            TreeItem<String> rootNode=new TreeItem<>(hostName,new ImageView(new Image("file:"+currentDir+"\\icons\\computer.png")));
             Iterable<Path> rootDirectories= FileSystems.getDefault().getRootDirectories();
             for(Path name:rootDirectories){
                 FilePathTreeItem treeNode=new FilePathTreeItem(new File(name.toString()));
@@ -421,7 +422,9 @@ public class RootController {
     }
 
     @FXML
-    private void toggleMetadataInfo(){}
+    private void toggleMetadataInfo(){
+        mainApp.hideMetadataView();
+    }
 
     @FXML
     private void displayAboutWindow(){}

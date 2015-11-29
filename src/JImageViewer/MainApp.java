@@ -4,6 +4,7 @@ import JImageViewer.model.ImageData;
 import JImageViewer.model.PixelInfo;
 import JImageViewer.util.ImageViewPane;
 import JImageViewer.util.PanAndZoomPane;
+import JImageViewer.view.MetadataViewController;
 import JImageViewer.view.RootController;
 import JImageViewer.view.StatusBarController;
 import JImageViewer.view.ThumbnailViewController;
@@ -18,6 +19,7 @@ import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -69,6 +71,7 @@ public class MainApp extends Application {
         this.primaryStage.setTitle("JImageViewer");
 
         initRootLayout();
+
     }
 
     /**
@@ -164,11 +167,9 @@ public class MainApp extends Application {
 
     }
 
-    public void hideZoomPane() { rootLayout.setCenter(null); }
-
     public void showThumbnailView(){
         try {
-            // Load ImageViewer.
+            // Load Thumbnail viewer.
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(MainApp.class.getResource("view/ThumbnailView.fxml"));
             VBox gridView = loader.load();
@@ -187,6 +188,31 @@ public class MainApp extends Application {
     }
 
     public void hideThumbnailView(){rootLayout.setCenter(null);}
+
+    public void showMetadataView(){
+        try {
+            // Load Metadata layout from fxml file.
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(MainApp.class.getResource("view/MetadataView.fxml"));
+            AnchorPane metadataView = loader.load();
+
+
+            // Show the scene containing the root layout.
+            rootLayout.setRight(metadataView);
+
+            // Giving the controller access to the main app.
+            MetadataViewController controller = loader.getController();
+            controller.setMainApp(this);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.err.println("Metadata layout loading error.");
+        }
+    }
+
+    public void hideMetadataView(){
+        rootLayout.setRight(null);
+    }
 
     /**
      * Shows the StatusBar inside the root layout.

@@ -13,6 +13,7 @@ import java.util.List;
 
 public class ImageData {
     private final ObservableList<Image> imageObservableList = FXCollections.observableArrayList();
+    private final ObservableList<String> metadataObservableList = FXCollections.observableArrayList();
     private List<Path> pathList;
     private int currentListIndex;
     private final ObjectProperty<File> imageFile;
@@ -114,6 +115,10 @@ public class ImageData {
 
     public ObservableList<Image> getImageObservableList() {
         return imageObservableList;
+    }
+
+    public ObservableList<String> getMetadataObservableList() {
+        return metadataObservableList;
     }
 
     public List<Path> getPathList() {

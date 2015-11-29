@@ -9,9 +9,10 @@ import javafx.scene.image.ImageView;
 import java.io.File;
 
 public class FilePathTreeItem extends TreeItem<String>{
-    public static Image folderCollapseImage=new Image("file:./utilfolder.png");
-    public static Image folderExpandImage=new Image("file:./utilfolder-open.png");
-    public static Image fileImage=new Image("file:./utiltext-x-generic.png");
+    public static Image folderCollapseImage=new Image("file:"+System.getProperty("user.dir")+"\\icons\\folder.png");
+    public static Image folderExpandImage=new Image("file:"+System.getProperty("user.dir")+"\\icons\\folder-open.png");
+    public static Image imageImage=new Image("file:"+System.getProperty("user.dir")+"\\icons\\image-x-generic.png");
+    public static Image fileImage=new Image("file:"+System.getProperty("user.dir")+"\\icons\\text-x-generic.png");
     private boolean isLeaf;
     private boolean isFirstTimeChildren=true;
     private boolean isFirstTimeLeaf=true;
@@ -44,7 +45,10 @@ public class FilePathTreeItem extends TreeItem<String>{
                             iv.setImage(folderExpandImage);
                         }
                     });
-        }else{
+        } else if (ImageFileTester.test(this.getFile())){
+            this.setGraphic(new ImageView(imageImage));
+        }
+        else{
             this.setGraphic(new ImageView(fileImage));
         }
         //set the value (which is what is displayed in the tree)
