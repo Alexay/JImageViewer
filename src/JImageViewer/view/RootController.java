@@ -368,6 +368,12 @@ public class RootController {
     }
 
     @FXML
+    private void hideToolbar() {
+        vbox.getChildren().remove(toolBar);
+        toolbar.setSelected(false);
+    }
+
+    @FXML
     private void toggleStatusbar(){
         if (statusbar.isSelected())
             mainApp.showStatusBar();

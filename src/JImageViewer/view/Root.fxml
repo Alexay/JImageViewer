@@ -284,6 +284,13 @@
                      </tooltip></Button>
                   <Separator orientation="VERTICAL" />
               </items>
+               <contextMenu>
+                  <ContextMenu>
+                    <items>
+                      <MenuItem mnemonicParsing="false" onAction="#hideToolbar" text="Hide" />
+                    </items>
+                  </ContextMenu>
+               </contextMenu>
             </ToolBar>
          </children>
       </VBox>
