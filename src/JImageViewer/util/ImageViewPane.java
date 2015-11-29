@@ -20,7 +20,7 @@ import java.awt.*;
 public class ImageViewPane extends Region {
     private MainApp mainApp;
 
-    private ObjectProperty<ImageView> imageViewProperty = new SimpleObjectProperty<ImageView>();
+    private ObjectProperty<ImageView> imageViewProperty = new SimpleObjectProperty<>();
 
     public ObjectProperty<ImageView> imageViewProperty() {
         return imageViewProperty;

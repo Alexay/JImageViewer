@@ -58,9 +58,7 @@ public class ThumbnailViewController {
                 timeline.getKeyFrames().add(kf);
                 timeline.play();
             });
-            imageGridCell.setOnMouseExited(event ->{
-                imageGridCell.setEffect(null);
-            });
+            imageGridCell.setOnMouseExited(event -> imageGridCell.setEffect(null));
             return imageGridCell;
         });
     }

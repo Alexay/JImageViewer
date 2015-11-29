@@ -10,8 +10,6 @@ import java.nio.file.PathMatcher;
 public class ImageFileTester {
     public static boolean test(File fileToTest) {
         final PathMatcher filter = fileToTest.toPath().getFileSystem().getPathMatcher("glob:**/*.{jpg,bmp,gif,png}");
-        if (filter.matches(fileToTest.toPath()))
-            return true;
-        return false;
+        return filter.matches(fileToTest.toPath());
     }
 }
