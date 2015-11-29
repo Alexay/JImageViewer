@@ -95,7 +95,7 @@ public class RootController {
     private MenuItem thumbnailView;
 
     @FXML
-    private MenuItem fullscreen;
+    private MenuItem fitView;
 
     @FXML
     private MenuItem zoomIn;
@@ -145,8 +145,6 @@ public class RootController {
     @FXML
     private Button pasteButton;
 
-    @FXML
-    private Button fullscreenButton;
 
     // Reference to the main application.
     private MainApp mainApp;
@@ -179,8 +177,6 @@ public class RootController {
 
         // Set the app's current imageData.
         mainApp.getImageData().setImageFile(imageFile);
-        mainApp.getImageData().setImage(new Image(imageFile.toURI().toString()));
-        mainApp.getImageData().setImageView(new ImageView(new Image(imageFile.toURI().toString())));
 
         // Set the title of the window to the name of the image + the resolution
         //mainApp.getPrimaryStage().setTitle(imageFile.getName() + " - " +
@@ -308,13 +304,21 @@ public class RootController {
         BufferedImage buffImg = SwingFXUtils.fromFXImage(mainApp.getImageData().getImage(), null);
         buffImg = RotateImage.getRotatedImage(buffImg, -1); // The "-1" will make Math.PI/2*(-1) go counter clockwise.
         mainApp.getImageData().setImage(SwingFXUtils.toFXImage(buffImg, null));
+
+        // Restart the image viewer due to zoom issues.
+        mainApp.hideImageViewer();
+        mainApp.showImageViewer();
     }
 
     @FXML
-    private void imageRotateClockwise(){
+    private void imageRotateClockwise() throws Exception {
         BufferedImage buffImg = SwingFXUtils.fromFXImage(mainApp.getImageData().getImage(), null);
         buffImg = RotateImage.getRotatedImage(buffImg, 1); // The "1" will make Math.PI/2 go clockwise.
         mainApp.getImageData().setImage(SwingFXUtils.toFXImage(buffImg, null));
+
+        // Restart the image viewer due to zoom issues.
+        mainApp.hideImageViewer();
+        mainApp.showImageViewer();
     }
 
     @FXML
@@ -328,9 +332,6 @@ public class RootController {
     }
 
     @FXML
-    private void engageFullscreen(){}
-
-    @FXML
     private void engageThumbnailView(){
         mainApp.hideThumbnailView();
         mainApp.hideImageViewer();
@@ -338,10 +339,19 @@ public class RootController {
     }
 
     @FXML
-    private void imageZoomIn(){}
+    private void imageZoomIn() throws Exception {
+        mainApp.showZoomPane();
+    }
 
     @FXML
-    private void imageZoomOut(){}
+    private void imageZoomOut() throws Exception {
+        mainApp.showZoomPane();
+    }
+
+    @FXML
+    private void imageFitView() throws Exception {
+        mainApp.showImageViewer();
+    }
 
     @FXML
     private void toggleToolbar() {

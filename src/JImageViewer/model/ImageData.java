@@ -18,7 +18,6 @@ public class ImageData {
     private final ObjectProperty<File> imageFile;
     private final ObjectProperty<Image> image;
     private final ObjectProperty<ImageView> imageView;
-    private final DoubleProperty zoom;
     private final BooleanProperty recursiveScanning;
     private final BooleanProperty sortByDateCreated;
     private final BooleanProperty sortByDateModified;
@@ -30,7 +29,6 @@ public class ImageData {
         imageFile = new SimpleObjectProperty<>();
         image = new SimpleObjectProperty<>();
         imageView = new SimpleObjectProperty<>();
-        zoom = new SimpleDoubleProperty();
         recursiveScanning = new SimpleBooleanProperty(false);
         sortByFilename = new SimpleBooleanProperty(true);
         sortByDateCreated = new SimpleBooleanProperty(false);
@@ -168,18 +166,6 @@ public class ImageData {
 
     public void setImageView(ImageView imageView) {
         this.imageView.set(imageView);
-    }
-
-    public double getZoom() {
-        return zoom.get();
-    }
-
-    public DoubleProperty zoomProperty() {
-        return zoom;
-    }
-
-    public void setZoom(double zoom) {
-        this.zoom.set(zoom);
     }
 
     public boolean getRecursiveScanning() {

@@ -3,20 +3,24 @@ package JImageViewer;
 import JImageViewer.model.ImageData;
 import JImageViewer.model.PixelInfo;
 import JImageViewer.util.ImageViewPane;
+import JImageViewer.util.PanAndZoomPane;
 import JImageViewer.view.RootController;
 import JImageViewer.view.StatusBarController;
 import JImageViewer.view.ThumbnailViewController;
 import javafx.application.Application;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TreeView;
-import javafx.scene.image.Image;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import org.controlsfx.control.GridView;
 import org.controlsfx.control.StatusBar;
 
 import java.io.IOException;
@@ -99,34 +103,68 @@ public class MainApp extends Application {
      */
     public void showImageViewer() throws Exception{
 
+        // Initialize all ImageView related stuff.
         ImageViewPane imageViewPane = new ImageViewPane(imageData.getImageView());
-        rootLayout.setCenter(imageViewPane);
+        imageViewPane.setMaxHeight(imageData.getImage().getHeight());
+        imageViewPane.setMaxWidth(imageData.getImage().getWidth());
         // Listener for the current image that sets the current image as the image to be in the ImageView
-        imageData.imageProperty().addListener(((observable, oldValue, newValue) ->
-                imageViewPane.getImageView().setImage(newValue)));
+        imageData.imageProperty().addListener((observable, oldValue, newValue) -> {
+            imageViewPane.setMaxHeight(newValue.getHeight());
+            imageViewPane.setMaxWidth(newValue.getWidth());
+            imageViewPane.getImageView().setImage(newValue);
+        });
         imageViewPane.initializeListeners(this);
-//        try {
-//            // Load ImageViewer.
-//            FXMLLoader loader = new FXMLLoader();
-//            loader.setLocation(MainApp.class.getResource("view/ImageViewer.fxml"));
-//            AnchorPane imageViewer = loader.load();
-//
-//            // Set the ImageViewer into the center of root layout.
-//            rootLayout.setCenter(imageViewer);
-//
-//            // Giving the controller access to the main app.
-//            ImageViewerController controller = loader.getController();
-//            controller.setMainApp(this);
-//
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//            System.err.println("ImageViewer layout loading error.");
-//        }
+        imageViewPane.setMainApp(this);
+
+        rootLayout.setCenter(imageViewPane);
     }
 
     public void hideImageViewer() {
         rootLayout.setCenter(null);
     }
+
+    public void showZoomPane() throws Exception {
+        ScrollPane scrollPane = new ScrollPane();
+        final DoubleProperty zoomProperty = new SimpleDoubleProperty(1.0d);
+        final DoubleProperty deltaY = new SimpleDoubleProperty(0.0d);
+
+        scrollPane.setPannable(true);
+        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+
+        // Initialize all ImageView related stuff.
+        ImageViewPane imageViewPane = new ImageViewPane(imageData.getImageView());
+        imageViewPane.setMaxHeight(imageData.getImage().getHeight());
+        imageViewPane.setMaxWidth(imageData.getImage().getWidth());
+        // Listener for the current image that sets the current image as the image to be in the ImageView
+        imageData.imageProperty().addListener((observable, oldValue, newValue) -> {
+            imageViewPane.setMaxHeight(newValue.getHeight());
+            imageViewPane.setMaxWidth(newValue.getWidth());
+            imageViewPane.getImageView().setImage(newValue);
+        });
+        imageViewPane.initializeListeners(this);
+        imageViewPane.setMainApp(this);
+
+        // Create canvas.
+        PanAndZoomPane panAndZoomPane = new PanAndZoomPane();
+        zoomProperty.bind(panAndZoomPane.myScaleProperty());
+        deltaY.bind(panAndZoomPane.deltaY);
+        panAndZoomPane.getChildren().add(imageViewPane);
+
+        // Initialize zoom-related events.
+        PanAndZoomPane.SceneGestures sceneGestures = new PanAndZoomPane.SceneGestures(panAndZoomPane, this);
+        scrollPane.setContent(panAndZoomPane);
+        panAndZoomPane.toBack();
+        scrollPane.addEventFilter(MouseEvent.MOUSE_CLICKED, sceneGestures.getOnMouseClickedEventHandler());
+        scrollPane.addEventFilter(MouseEvent.MOUSE_PRESSED, sceneGestures.getOnMousePressedEventHandler());
+        scrollPane.addEventFilter(MouseEvent.MOUSE_DRAGGED, sceneGestures.getOnMouseDraggedEventHandler());
+        scrollPane.addEventFilter(ScrollEvent.ANY, sceneGestures.getOnScrollEventHandler());
+
+        rootLayout.setCenter(scrollPane);
+
+    }
+
+    public void hideZoomPane() { rootLayout.setCenter(null); }
 
     public void showThumbnailView(){
         try {

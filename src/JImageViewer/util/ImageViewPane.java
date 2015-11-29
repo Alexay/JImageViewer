@@ -18,6 +18,7 @@ import javafx.scene.layout.Region;
 import java.awt.*;
 
 public class ImageViewPane extends Region {
+    private MainApp mainApp;
 
     private ObjectProperty<ImageView> imageViewProperty = new SimpleObjectProperty<ImageView>();
 
@@ -113,5 +114,15 @@ public class ImageViewPane extends Region {
             // Pass it on to the MainApp
             mainApp.getPixelInfo().setInfoString(pixelInfo);
         });
+
+        mainApp.getImageData().getImageView().setOnScroll(event -> { try {
+            mainApp.hideImageViewer();
+            mainApp.showZoomPane();
+        } catch (Exception ignore){}
+        });
+    }
+
+    public void setMainApp(MainApp mainApp){
+        this.mainApp = mainApp;
     }
 }

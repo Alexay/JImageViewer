@@ -121,11 +121,6 @@
                               <KeyCodeCombination alt="UP" code="T" control="UP" meta="ANY" shift="UP" shortcut="UP" />
                            </accelerator>
                         </MenuItem>
-                        <MenuItem fx:id="fullscreen" onAction="#engageFullscreen" text="_Fullscreen">
-                           <accelerator>
-                              <KeyCodeCombination alt="UP" code="F11" control="UP" meta="ANY" shift="UP" shortcut="UP" />
-                           </accelerator>
-                        </MenuItem>
                         <MenuItem fx:id="zoomIn" onAction="#imageZoomIn" text="Zoom _In">
                            <accelerator>
                               <KeyCodeCombination alt="UP" code="PLUS" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
@@ -134,6 +129,11 @@
                         <MenuItem fx:id="zoomOut" onAction="#imageZoomOut" text="_Zoom Out">
                            <accelerator>
                               <KeyCodeCombination alt="UP" code="MINUS" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                           </accelerator>
+                        </MenuItem>
+                        <MenuItem fx:id="fitView" onAction="#imageFitView" text="_Fit View">
+                           <accelerator>
+                              <KeyCodeCombination alt="UP" code="DIGIT0" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
                            </accelerator>
                         </MenuItem>
                      </items>
@@ -184,7 +184,10 @@
                               <Image url="@../../../icons/Previous.png" />
                            </image>
                         </ImageView>
-                     </graphic></Button>
+                     </graphic>
+                     <tooltip>
+                        <Tooltip text="Previous Image" />
+                     </tooltip></Button>
                   <Button fx:id="nextButton" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#nextImage" prefHeight="25.0" prefWidth="25.0">
                      <graphic>
                         <ImageView>
@@ -192,7 +195,10 @@
                               <Image url="@../../../icons/Next.png" />
                            </image>
                         </ImageView>
-                     </graphic></Button>
+                     </graphic>
+                     <tooltip>
+                        <Tooltip text="Next Image" />
+                     </tooltip></Button>
                   <Separator orientation="VERTICAL" />
                   <Button fx:id="openButton" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#openImageFile" prefHeight="25.0" prefWidth="25.0">
                      <graphic>
@@ -204,7 +210,10 @@
                               <Rectangle2D />
                            </viewport>
                         </ImageView>
-                     </graphic></Button>
+                     </graphic>
+                     <tooltip>
+                        <Tooltip text="Open Image" />
+                     </tooltip></Button>
                   <Button fx:id="openDirButton" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#openImageDir" prefHeight="25.0" prefWidth="25.0">
                      <graphic>
                         <ImageView>
@@ -212,7 +221,10 @@
                               <Image url="@../../../icons/OpenDir.png" />
                            </image>
                         </ImageView>
-                     </graphic></Button>
+                     </graphic>
+                     <tooltip>
+                        <Tooltip text="Open Folder" />
+                     </tooltip></Button>
                   <Button fx:id="saveButton" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#saveImageAs" prefHeight="25.0" prefWidth="25.0">
                      <graphic>
                         <ImageView>
@@ -220,7 +232,10 @@
                               <Image url="@../../../icons/Save.png" />
                            </image>
                         </ImageView>
-                     </graphic></Button>
+                     </graphic>
+                     <tooltip>
+                        <Tooltip text="Save Image As" />
+                     </tooltip></Button>
                   <Separator orientation="VERTICAL" />
                   <Button fx:id="rotateCounterClockwiseButton" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#imageRotateCounterClockwise" prefHeight="25.0" prefWidth="25.0">
                      <graphic>
@@ -229,7 +244,10 @@
                               <Image url="@../../../icons/RotateCounterClockwise.png" />
                            </image>
                         </ImageView>
-                     </graphic></Button>
+                     </graphic>
+                     <tooltip>
+                        <Tooltip text="Rotate 90° Counter Clockwse" />
+                     </tooltip></Button>
                   <Button fx:id="rotateClockwiseButton" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#imageRotateClockwise" prefHeight="25.0" prefWidth="25.0">
                      <graphic>
                         <ImageView>
@@ -237,7 +255,10 @@
                               <Image url="@../../../icons/RotateClockwise.png" />
                            </image>
                         </ImageView>
-                     </graphic></Button>
+                     </graphic>
+                     <tooltip>
+                        <Tooltip text="Rotate 90° Clockwse" />
+                     </tooltip></Button>
                   <Separator orientation="VERTICAL" />
                   <Button fx:id="copyButton" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#copyImage" prefHeight="25.0" prefWidth="25.0">
                      <graphic>
@@ -246,7 +267,10 @@
                               <Image url="@../../../icons/Copy.png" />
                            </image>
                         </ImageView>
-                     </graphic></Button>
+                     </graphic>
+                     <tooltip>
+                        <Tooltip text="Copy" />
+                     </tooltip></Button>
                   <Button fx:id="pasteButton" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#pasteImage" prefHeight="25.0" prefWidth="25.0">
                      <graphic>
                         <ImageView>
@@ -254,16 +278,11 @@
                               <Image url="@../../../icons/Paste.png" />
                            </image>
                         </ImageView>
-                     </graphic></Button>
+                     </graphic>
+                     <tooltip>
+                        <Tooltip text="Paste" />
+                     </tooltip></Button>
                   <Separator orientation="VERTICAL" />
-                  <Button fx:id="fullscreenButton" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#engageFullscreen" prefHeight="25.0" prefWidth="25.0">
-                     <graphic>
-                        <ImageView>
-                           <image>
-                              <Image url="@../../../icons/Fullscreen.png" />
-                           </image>
-                        </ImageView>
-                     </graphic></Button>
               </items>
             </ToolBar>
          </children>
