@@ -53,12 +53,12 @@ public class StatusBarController {
         statusBar.getRightItems().addAll(fileSize, new Separator(Orientation.VERTICAL), creationDate);
 
         // Initializing pixel info listener and updater
-        this.mainApp.getPixelInfo().infoStringProperty().addListener((observable, oldValue, newValue) -> {
+        mainApp.getPixelInfo().infoStringProperty().addListener((observable, oldValue, newValue) -> {
             statusBar.setText(newValue);
         });
 
         // Initializing date and file size info listener and updater
-        this.mainApp.getImageData().imageFileProperty().addListener(((observable, oldValue, newValue) -> {
+        mainApp.getImageData().imageFileProperty().addListener(((observable, oldValue, newValue) -> {
             fileSize.setText(FileSizeReader.readableFileSize(newValue.length()));
             creationDate.setText(" " + simpleDateFormat.format(new Date(newValue.lastModified())));
         }));

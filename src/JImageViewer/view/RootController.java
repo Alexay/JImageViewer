@@ -283,8 +283,8 @@ public class RootController {
     private void previousImage(){
         int prevImageIndex = mainApp.getImageData().getCurrentListIndex()-1;
         if (mainApp.getImageData().getCurrentListIndex()==0)
-            prevImageIndex = mainApp.getImageData().getImageArray().length-1;
-        mainApp.getImageData().setImage(mainApp.getImageData().getImageArray()[prevImageIndex]);
+            prevImageIndex = mainApp.getImageData().getImageObservableList().size()-1;
+        mainApp.getImageData().setImage(mainApp.getImageData().getImageObservableList().get(prevImageIndex));
         mainApp.getImageData().setImageFile(mainApp.getImageData().getPathList().get(prevImageIndex).toFile());
         mainApp.getImageData().setCurrentListIndex(prevImageIndex);
     }
@@ -292,9 +292,9 @@ public class RootController {
     @FXML
     private void nextImage(){
         int nextImageIndex = mainApp.getImageData().getCurrentListIndex()+1;
-        if (mainApp.getImageData().getCurrentListIndex()==mainApp.getImageData().getImageArray().length-1)
+        if (mainApp.getImageData().getCurrentListIndex()==mainApp.getImageData().getImageObservableList().size()-1)
             nextImageIndex = 0;
-        mainApp.getImageData().setImage(mainApp.getImageData().getImageArray()[nextImageIndex]);
+        mainApp.getImageData().setImage(mainApp.getImageData().getImageObservableList().get(nextImageIndex));
         mainApp.getImageData().setImageFile(mainApp.getImageData().getPathList().get(nextImageIndex).toFile());
         mainApp.getImageData().setCurrentListIndex(nextImageIndex);
     }

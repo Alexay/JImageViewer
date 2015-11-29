@@ -1,12 +1,14 @@
 package JImageViewer.view;
 
 import JImageViewer.MainApp;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.fxml.FXML;
+import javafx.scene.effect.Glow;
 import javafx.scene.image.Image;
-import javafx.util.Callback;
-import org.controlsfx.control.GridCell;
+import javafx.util.Duration;
 import org.controlsfx.control.GridView;
-import org.controlsfx.control.StatusBar;
 import org.controlsfx.control.cell.ImageGridCell;
 
 /**
@@ -33,7 +35,34 @@ public class ThumbnailViewController {
      */
     @FXML
     private void initialize() {
-        gridView.setCellFactory(param -> new ImageGridCell());
+        gridView.setCellFactory ( param -> {
+            ImageGridCell imageGridCell = new ImageGridCell();
+            imageGridCell.setOnMouseClicked(event -> {
+                try {
+                    mainApp.getImageData().setImage(imageGridCell.getItem());
+                    mainApp.getImageData().reSort();
+                    mainApp.showImageViewer();
+                } catch (Exception i) {
+                    System.err.println(i + " ImageGridCell event failure");
+                }
+            });
+            imageGridCell.setOnMouseEntered(event ->{
+                Glow glow = new Glow();
+                glow.setLevel(1);
+                imageGridCell.setEffect(glow);
+                final Timeline timeline = new Timeline();
+                timeline.setCycleCount(Timeline.INDEFINITE);
+                timeline.setAutoReverse(true);
+                final KeyValue kv = new KeyValue(glow.levelProperty(), 0.3);
+                final KeyFrame kf = new KeyFrame(Duration.millis(700), kv);
+                timeline.getKeyFrames().add(kf);
+                timeline.play();
+            });
+            imageGridCell.setOnMouseExited(event ->{
+                imageGridCell.setEffect(null);
+            });
+            return imageGridCell;
+        });
     }
 
     /**

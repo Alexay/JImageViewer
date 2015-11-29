@@ -13,7 +13,6 @@ import java.util.List;
 
 public class ImageData {
     private final ObservableList<Image> imageObservableList = FXCollections.observableArrayList();
-    private Image[] imageArray;
     private List<Path> pathList;
     private int currentListIndex;
     private final ObjectProperty<File> imageFile;
@@ -48,39 +47,35 @@ public class ImageData {
      */
     public void refresh() {
         // Putting all the user settings into an array to pass on to the ImageFileReader.
-        boolean[] userSettings = {recursiveScanning.get(), sortByFilename.get(), sortByDateCreated.get(),sortByDateModified.get(), sortByAscending.get(), sortByDescending.get()};
+        final boolean[] userSettings = {recursiveScanning.get(), sortByFilename.get(), sortByDateCreated.get(), sortByDateModified.get(), sortByAscending.get(), sortByDescending.get()};
 
         // Setting the current imageArray to be parsed based on the current path and current settings.
         pathList = ImageFileReader.read(imageFile.get().toPath(), userSettings);
         ImageFileReader.sort(pathList, userSettings);
 
         imageObservableList.clear();
-        imageArray = new Image[pathList.size()];
-        for (int i = 0; i< pathList.size(); i++){
-            imageArray[i] = new Image(pathList.get(i).toUri().toString());
-            imageObservableList.add(imageArray[i]);
-        }
+        for (int i = 0; i < pathList.size(); i++)
+            imageObservableList.add(new Image(pathList.get(i).toUri().toString()));
 
         // Set the current list index
-            if (image.get()==null) {
-                image.set(imageArray[0]);
-                imageFile.set(pathList.get(0).toFile());
-                currentListIndex = 0;
-            }
-            else if (imageFile.get().isDirectory()) {
-                image.set(imageArray[0]);
-                currentListIndex = 0;
-            }
-            else {
-                for (int i = 0; i < imageArray.length; i++) {
-                    if (imageArray[i] == image.get()) {
-                        currentListIndex = i;
-                        break;
-                    }
+        if (image.get() == null) {
+            image.set(imageObservableList.get(0));
+            imageFile.set(pathList.get(0).toFile());
+            currentListIndex = 0;
+        } else if (imageFile.get().isDirectory()) {
+            image.set(imageObservableList.get(0));
+            imageFile.set(pathList.get(0).toFile());
+            currentListIndex = 0;
+        } else {
+            for (int i = 0; i < imageObservableList.size(); i++) {
+                if (imageObservableList.get(i).impl_getUrl().equals(image.get().impl_getUrl())) {
+                    currentListIndex = i;
+                    imageFile.setValue(pathList.get(i).toFile());
+                    break;
                 }
             }
+        }
         imageView.set(new ImageView(image.get()));
-        imageFile.set(pathList.get(currentListIndex).toFile());
     }
 
     /**
@@ -88,48 +83,39 @@ public class ImageData {
      * was made to avoid reinitializing the pathList.
      */
     public void reSort() {
-        boolean[] userSettings = {recursiveScanning.get(), sortByFilename.get(), sortByDateCreated.get(),sortByDateModified.get(), sortByAscending.get(), sortByDescending.get()};
+        final boolean[] userSettings = {recursiveScanning.get(), sortByFilename.get(), sortByDateCreated.get(),sortByDateModified.get(), sortByAscending.get(), sortByDescending.get()};
         ImageFileReader.sort(pathList, userSettings);
 
+
         imageObservableList.clear();
-        imageArray = new Image[pathList.size()];
-        for (int i = 0; i< pathList.size(); i++){
-            imageArray[i] = new Image(pathList.get(i).toUri().toString());
-            imageObservableList.add(imageArray[i]);
-        }
+        for (int i = 0; i< pathList.size(); i++)
+            imageObservableList.add(new Image(pathList.get(i).toUri().toString()));
 
         // Set the current list index
         if (image.get()==null) {
-            image.set(imageArray[0]);
+            image.set(imageObservableList.get(0));
             imageFile.set(pathList.get(0).toFile());
             currentListIndex = 0;
         }
         else if (imageFile.get().isDirectory()) {
-            image.set(imageArray[0]);
+            image.set(imageObservableList.get(0));
+            imageFile.set(pathList.get(0).toFile());
             currentListIndex = 0;
         }
         else {
-            for (int i = 0; i < imageArray.length; i++) {
-                if (imageArray[i] == image.get()) {
+            for (int i = 0; i < imageObservableList.size(); i++) {
+                if (imageObservableList.get(i).impl_getUrl().equals(image.get().impl_getUrl())) {
                     currentListIndex = i;
+                    imageFile.setValue(pathList.get(i).toFile());
                     break;
                 }
             }
         }
         imageView.set(new ImageView(image.get()));
-        imageFile.set(pathList.get(currentListIndex).toFile());
     }
 
     public ObservableList<Image> getImageObservableList() {
         return imageObservableList;
-    }
-
-    public Image[] getImageArray() {
-        return imageArray;
-    }
-
-    public void setImageArray(Image[] imageArray) {
-        this.imageArray = imageArray;
     }
 
     public List<Path> getPathList() {
