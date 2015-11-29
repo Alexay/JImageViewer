@@ -148,6 +148,8 @@ public class MainApp extends Application {
         }
     }
 
+    public void hideThumbnailView(){rootLayout.setCenter(null);}
+
     /**
      * Shows the StatusBar inside the root layout.
      */

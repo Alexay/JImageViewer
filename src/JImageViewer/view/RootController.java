@@ -11,7 +11,6 @@ import javafx.print.PrinterJob;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.image.WritableImage;
 import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
@@ -333,6 +332,7 @@ public class RootController {
 
     @FXML
     private void engageThumbnailView(){
+        mainApp.hideThumbnailView();
         mainApp.hideImageViewer();
         mainApp.showThumbnailView();
     }
@@ -363,9 +363,10 @@ public class RootController {
     private void toggleFileExplorer(){
         if (fileExplorer.isSelected()) {
             treeView = mainApp.getTreeView();
-            //populate file browser
+
+            // Populate file browser.
             String hostName=null;
-            try{hostName= InetAddress.getLocalHost().getHostName();}catch(UnknownHostException x){ System.out.println(x);} //TODO error dialog
+            try{hostName= InetAddress.getLocalHost().getHostName();}catch(UnknownHostException x){ System.out.println(x);}
             assert hostName != null : "Unable to get local host name.";
             TreeItem<String> rootNode=new TreeItem<>(hostName,new ImageView(new Image("file:./computer.png")));
             Iterable<Path> rootDirectories= FileSystems.getDefault().getRootDirectories();
@@ -374,7 +375,34 @@ public class RootController {
                 rootNode.getChildren().add(treeNode);
             }
             rootNode.setExpanded(true);
-            treeView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+
+            // Only allow one item to be selected at a time in the file tree
+            treeView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+
+            // Listen for an item to be selected in the file tree, then parse it's file and pass it on to the MainApp
+            treeView.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue) -> {
+                FilePathTreeItem selectedItem = (FilePathTreeItem) treeView.getTreeItem((int) newValue);
+                mainApp.getImageData().setImageFile(selectedItem.getFile());
+
+                // If the selected item from the file explorer is a directory - show the thumbnail view.
+                if (selectedItem.getFile().isDirectory()) {
+                    mainApp.getImageData().refresh();
+                    mainApp.showThumbnailView();
+                }
+
+                // Otherwise, show the image view.
+                else {
+                    mainApp.getImageData().setImage(new Image(selectedItem.getFile().toURI().toString()));
+                    mainApp.getImageData().refresh();
+                    try {
+                        mainApp.showImageViewer();
+                        mainApp.showStatusBar();
+                    } catch (Exception i) {
+                        System.err.println("File tree viewer caused an error when opening an image: " + i);
+                    }
+
+                }
+            });
             treeView.setRoot(rootNode);
             mainApp.showFileExplorerTree();
         }
